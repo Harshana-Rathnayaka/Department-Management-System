@@ -77,7 +77,7 @@
           <ul class="nav sidebar-inner" id="sidebar-menu">
 
             <li>
-              <a class="sidenav-item-link" href="index.html">
+              <a class="sidenav-item-link" href="index.php">
                 <i class="mdi mdi-city"></i>
                 <span class="nav-text">Departments</span>
               </a>
@@ -170,7 +170,13 @@
 
       </header>
 
+      <?php
 
+require_once '../api/getLists.php';
+$department_count = mysqli_num_rows($departments);
+$user_count = mysqli_num_rows($users);
+
+?>
       <div class="content-wrapper">
         <div class="content">
 
@@ -180,7 +186,7 @@
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
                   <i class="mdi mdi-city mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5</h3>
+                  <h3 class="text-white my-2"><?php echo $department_count; ?></h3>
                   <p>Departments</p>
                 </div>
               </div>
@@ -190,7 +196,7 @@
               <div class="card widget-block p-4 rounded bg-warning border">
                 <div class="card-block">
                   <i class="mdi mdi-account-multiple mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
+                  <h3 class="text-white my-2"><?php echo $user_count; ?></h3>
                   <p>Users</p>
                 </div>
               </div>
@@ -229,16 +235,59 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form>
+                  <form action="../api/createUser.php" method="POST">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Username</label>
-                      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                      <label for="fullname">Full Name</label>
+                      <input type="text" class="form-control" name="fullname" id="fullname" aria-describedby="fullnameHelp" required
+                        placeholder="Enter the full name">
+                      <small id="fullnameHelp" class="form-text text-muted">This is the full name of the new User.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="username">Username</label>
+                      <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" required
+                        placeholder="Enter the username">
+                      <small id="usernameHelp" class="form-text text-muted">This is the username for the new User.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" required
+                        placeholder="Enter the email">
+                      <small id="emailHelp" class="form-text text-muted">This is the email of the new User.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="password">Password</label>
+                      <input type="password" class="form-control" name="password" id="password" aria-describedby="passwordHelp" required
                         placeholder="Enter the name">
-                      <small id="emailHelp" class="form-text text-muted">This is the username of the new User.</small>
+                      <small id="passwordHelp" class="form-text text-muted">This is the password for the new User.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="usertype">Account Type</label>
+                      <select class="form-control" name="usertype" id="usertype">
+                        <option value="0">Admin</option>
+                        <option value="1">Team Leader</option>
+                        <option value="2">Department Manager</option>
+                        <option value="3">Finance Manager</option>
+                      </select>
+                      <small class="form-text text-muted">This is the account type of the new User.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="department">Department</label>
+                      <select class="form-control" name="department" id="department">
+                      <?php
+include '../api/getLists.php';
+if ($departmentList):
+    while ($row = mysqli_fetch_array($departmentList)):
+    ?>
+							                    <option value="<?php echo $row['id']; ?>"> <?php echo $row['name']; ?></option>
+							                <?php
+endwhile;
+endif;
+?>
+                      </select>
+                      <small class="form-text text-muted">This is the department of the new User.</small>
                     </div>
 
-
-                    <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                    <button type="submit" name="btnCreateUser" class="btn btn-block btn-primary">Submit</button>
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -260,108 +309,64 @@
                     New user
                   </button>
                 </div>
-
+<br><br>
                 <div class="card-body pt-0 pb-5">
                   <table class="table card-table table-hover table-responsive table-responsive-large"
-                    style="width:100%">
+                    style="width:100%" id="userTable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Username</th>
-                        <th>Full Name</th>
+                        <th scope="col">Full Name</th>
+                        <th>Username</th>
                         <th>Email</th>
+                        <th>Department</th>
                         <th>Type</th>
-                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td scope="row">1</td>
-                        <td>Lucia</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">2</td>
 
-                        <td>catrin</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                    <?php
+while ($row = mysqli_fetch_array($users)):
+?>
 
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
                       <tr>
-                        <td scope="row">3</td>
-                        <td>Lilli</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td><?php echo $row['id']; ?></td>
+                        <td ><?php echo $row['fullname']; ?></td>
+                        <td><?php echo $row['username']; ?></td>
+                        <td ><?php echo $row['email']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
+                        <?php
+$user_type = $row['user_type'];
+if ($user_type == 1):
+?>
                         <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
+                          <span class="badge badge-warning text-uppercase">Team Leader</span>
                         </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
+                        <?php
+elseif ($user_type == 2):
+?>
+                          <td>
+                          <span class="badge badge-success text-uppercase">Department Manager</span>
                         </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">4</td>
-                        <td>Else</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
+                        <?php
+elseif ($user_type == 3):
+?>
+                          <td>
+                          <span class="badge badge-info text-uppercase">Finance Manager</span>
                         </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">5</td>
-                        <td>Ursel</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
+                        <?php
+endif;
+?>
                         <td>
                           <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
+                          <!-- <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button> -->
                         </td>
                       </tr>
-                      <tr>
-                        <td scope="row">6</td>
-                        <td>Anke</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
+                      <?php
+endwhile;
+?>
+
                     </tbody>
                   </table>
                 </div>
@@ -391,7 +396,6 @@
   </div>
 
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCn8TFXGg17HAUcNpkwtxxyT9Io9B_NcM" defer></script>
   <script src="assets/plugins/jquery/jquery.min.js"></script>
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/plugins/toaster/toastr.min.js"></script>
@@ -411,7 +415,17 @@
   <script src="assets/js/date-range.js"></script>
   <script src="assets/js/map.js"></script>
   <script src="assets/js/custom.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 
+
+  <script>
+    $(document).ready(function() {
+      $('#userTable').DataTable({
+        "lengthMenu": [5, 10],
+      });
+    });
+  </script>
 
 
 

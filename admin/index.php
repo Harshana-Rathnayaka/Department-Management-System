@@ -1,3 +1,22 @@
+<?php
+session_start();
+if (!isset($_SESSION['User'])) {
+    $_SESSION['error'] = "Session timed out. Please login to continue.";
+    header('location:../signin.php');
+} elseif (isset($_SESSION['UserType'])) {
+    $usertype = $_SESSION['UserType'];
+
+    // if ($usertype == 1) {
+    //   header('location:../leader/index.php');
+    // } else if ($usertype == 2) {
+    //   header('location:../manager/index.php');
+    // } else if ($usertype == 3) {
+    //   header('location:../finance/index.php');
+    // }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -84,7 +103,7 @@
             </li>
 
             <li>
-              <a class="sidenav-item-link" href="users.html">
+              <a class="sidenav-item-link" href="users.php">
                 <i class="mdi mdi-account-multiple"></i>
                 <span class="nav-text">Users</span>
               </a>
@@ -170,6 +189,14 @@
 
       </header>
 
+      <?php
+
+require_once '../api/getLists.php';
+$department_count = mysqli_num_rows($departments);
+$user_count = mysqli_num_rows($users);
+
+?>
+
 
       <div class="content-wrapper">
         <div class="content">
@@ -180,7 +207,7 @@
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
                   <i class="mdi mdi-city mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5</h3>
+                  <h3 class="text-white my-2"><?php echo $department_count; ?></h3>
                   <p>Departments</p>
                 </div>
               </div>
@@ -190,7 +217,7 @@
               <div class="card widget-block p-4 rounded bg-warning border">
                 <div class="card-block">
                   <i class="mdi mdi-account-multiple mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
+                  <h3 class="text-white my-2"><?php echo $user_count; ?></h3>
                   <p>Users</p>
                 </div>
               </div>
@@ -229,21 +256,20 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form>
+                  <form action="../api/createDepartment.php" method="POST">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Department name</label>
-                      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                        placeholder="Enter the name">
-                      <small id="emailHelp" class="form-text text-muted">This is the name of the Department.</small>
+                      <label for="departmentName">Department name</label>
+                      <input type="text" class="form-control" name="departmentName" id="departmentName" required
+                        aria-describedby="departmentNameHelp" placeholder="Enter the name">
+                      <small id="departmentNameHelp" class="form-text text-muted">This is the name of the
+                        Department.</small>
                     </div>
 
-
-                    <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                    <button type="submit" name="createDepartmentBtn" class="btn btn-block btn-primary">Submit</button>
                   </form>
                 </div>
                 <div class="modal-footer">
-                  <!-- <button type="button" class="btn btn-danger btn-pill" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary btn-pill">Save Changes</button> -->
+
                 </div>
               </div>
             </div>
@@ -260,90 +286,35 @@
                     New department
                   </button>
                 </div>
-
+<br> <br> 
                 <div class="card-body pt-0 pb-5">
                   <table class="table card-table table-hover table-responsive table-responsive-large"
-                    style="width:100%">
+                    style="width:100%" id="departmentTable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Department Name</th>
-                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td scope="row">1</td>
-                        <td>Lucia</td>
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">2</td>
 
-                        <td>catrin</td>
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
+<?php
+while ($row = mysqli_fetch_array($departments)):
+?>
                       <tr>
-                        <td scope="row">3</td>
-                        <td>Lilli</td>
-
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
+                        <td><?php echo $row['id']; ?></td>
+                        <td><?php echo $row['name']; ?></td>
                         <td>
                           <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
                           <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
                         </td>
                       </tr>
-                      <tr>
-                        <td scope="row">4</td>
-                        <td>Else</td>
 
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">5</td>
-                        <td>Ursel</td>
+                      <?php
+endwhile;
+?>
 
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td scope="row">6</td>
-                        <td>Anke</td>
-
-                        <td>
-                          <span class="badge badge-success text-uppercase">Active</span>
-                        </td>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
-                        </td>
-                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -373,7 +344,6 @@
   </div>
 
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCn8TFXGg17HAUcNpkwtxxyT9Io9B_NcM" defer></script>
   <script src="assets/plugins/jquery/jquery.min.js"></script>
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/plugins/toaster/toastr.min.js"></script>
@@ -393,7 +363,16 @@
   <script src="assets/js/date-range.js"></script>
   <script src="assets/js/map.js"></script>
   <script src="assets/js/custom.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 
+  <script>
+    $(document).ready(function() {
+      $('#departmentTable').DataTable({
+        "lengthMenu": [5, 10],
+      });
+    });
+  </script>
 
 
 
