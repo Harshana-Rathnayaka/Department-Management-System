@@ -98,7 +98,7 @@ if (!isset($_SESSION['UserName'])) {
           <ul class="nav sidebar-inner" id="sidebar-menu">
 
             <li class="active">
-              <a class="sidenav-item-link" href="index.html">
+              <a class="sidenav-item-link" href="index.php">
                 <i class="mdi mdi-city"></i>
                 <span class="nav-text">Departments</span>
               </a>
