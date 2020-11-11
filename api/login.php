@@ -21,31 +21,68 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // checks if the user is active
             if ($user['status'] == 1) {
 
-                // session and reroute
-                $_SESSION['UserName'] = $_POST['username'];
-                $_SESSION['FullName'] = $user['fullname'];
-                $_SESSION['Email'] = $user['email'];
-                $_SESSION['Id'] = $user['id'];
-                $_SESSION['UserType'] = $user['user_type'];
-
-                $response['error'] = false;
-                $response['message'] = "Logged in successfully!";
-                $response['user_type'] = $user['user_type'];
-
                 // admin account
                 if ($user['user_type'] == 0) {
+
+                    // session and reroute
+                    $_SESSION['UserName'] = $_POST['username'];
+                    $_SESSION['FullName'] = $user['fullname'];
+                    $_SESSION['Email'] = $user['email'];
+                    $_SESSION['Id'] = $user['id'];
+                    $_SESSION['UserType'] = $user['user_type'];
+
+                    $response['error'] = false;
+                    $response['message'] = "Logged in successfully!";
+                    $response['user_type'] = $user['user_type'];
+
                     header("location:../admin/index.php");
 
                     // team leader account
-                } elseif ($user['user_type'] == 0) {
+                } elseif ($user['user_type'] == 1) {
+
+                    // session and reroute
+                    $_SESSION['UserName'] = $_POST['username'];
+                    $_SESSION['FullName'] = $user['fullname'];
+                    $_SESSION['Email'] = $user['email'];
+                    $_SESSION['Id'] = $user['id'];
+                    $_SESSION['UserType'] = $user['user_type'];
+
+                    $response['error'] = false;
+                    $response['message'] = "Logged in successfully!";
+                    $response['user_type'] = $user['user_type'];
+
                     header("location:../leader/index.php");
 
                     // department manager account
                 } elseif ($user['user_type'] == 2) {
+
+                    // session and reroute
+                    $_SESSION['UserName'] = $_POST['username'];
+                    $_SESSION['FullName'] = $user['fullname'];
+                    $_SESSION['Email'] = $user['email'];
+                    $_SESSION['Id'] = $user['id'];
+                    $_SESSION['UserType'] = $user['user_type'];
+
+                    $response['error'] = false;
+                    $response['message'] = "Logged in successfully!";
+                    $response['user_type'] = $user['user_type'];
+
                     header("location:../department/index.php");
 
                     // finance manager account
                 } elseif ($user['user_type'] == 3) {
+
+                    // session and reroute
+                    $_SESSION['UserName'] = $_POST['username'];
+                    $_SESSION['FullName'] = $user['fullname'];
+                    $_SESSION['Email'] = $user['email'];
+                    $_SESSION['Id'] = $user['id'];
+                    $_SESSION['UserType'] = $user['user_type'];
+
+                    $response['error'] = false;
+                    $response['message'] = "Logged in successfully!";
+                    $response['user_type'] = $user['user_type'];
+
                     header("location:../finance/index.php");
 
                 } else {

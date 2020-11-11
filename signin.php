@@ -1,3 +1,17 @@
+<?php
+session_start();
+if (isset($_SESSION['UserName'])) {
+    $usertype = $_SESSION['UserType'];
+    if ($usertype == 0) {
+        header("location:admin/index.php");
+    } elseif ($usertype == 1) {
+        header("location:leader/index.php");
+    }
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,6 +88,38 @@
                   <div class="col-md-12">
 
                     <button type="submit" class="btn btn-lg btn-primary btn-block mb-4">Sign In</button>
+
+
+                    <?php
+if (@$_SESSION['error'] == true) {
+    ?>
+                        <div role="alert" class=" alert-danger alert text-center py-3">
+                        <i class="mdi mdi-alert mr-1"></i>
+                            <?php echo $_SESSION['error']; ?>
+                        </div>
+                    <?php
+unset($_SESSION['error']);
+} elseif (@$_SESSION['missing'] == true) {
+    ?>
+
+                        <div role="alert" class=" alert-danger alert text-center py-3">
+                        <i class="mdi mdi-alert mr-1"></i>
+                        <?php echo $_SESSION['missing']; ?>
+                        </div>
+                    <?php
+unset($_SESSION['success']);
+} elseif (@$_SESSION['success'] == true) {
+    ?>
+                        <div role="alert" class=" alert-danger alert text-center py-3">
+                        <i class="mdi mdi-alert mr-1"></i>
+                        <?php echo $_SESSION['success']; ?>
+                        </div>
+                    <?php
+unset($_SESSION['success']);
+}
+?>
+
+
 
                   </div>
                 </div>
