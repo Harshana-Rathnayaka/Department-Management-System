@@ -6,13 +6,13 @@ if (!isset($_SESSION['UserName'])) {
 } elseif (isset($_SESSION['UserType'])) {
     $usertype = $_SESSION['UserType'];
 
-    // if ($usertype == 1) {
-    //   header('location:../leader/index.php');
-    // } else if ($usertype == 2) {
-    //   header('location:../manager/index.php');
-    // } else if ($usertype == 3) {
-    //   header('location:../finance/index.php');
-    // }
+    if ($usertype == 1) {
+      header('location:../leader/index.php');
+    } else if ($usertype == 2) {
+      header('location:../manager/index.php');
+    } else if ($usertype == 3) {
+      header('location:../finance/index.php');
+    }
 }
 ?>
 
