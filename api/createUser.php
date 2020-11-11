@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $response['error'] = false;
             $response['message'] = "User created successfully!";
+            $_SESSION['success'] = "User created successfully!";
 
             $_SESSION['User'] = $_POST['username'];
             $_SESSION['FullName'] = $_POST['fullname'];
@@ -47,35 +48,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } elseif ($result == 2) {
 
             // some error
-
             $_SESSION['error'] = "Something went wrong, please try again later.";
-
             $response['error'] = true;
             $response['message'] = "Something went wrong, please try again later.";
-
             header("location:../admin/users.php");
+
         } elseif ($result == 0) {
 
             // user exists
-
             $_SESSION['error'] = "It seems that this user already exists, please choose a different email and username.";
-
             $response['error'] = true;
             $response['message'] = "It seems that this user already exists, please choose a different email and username";
-
             header("location:../admin/users.php");
         }
     } else {
+
         // missing fields
-
         $_SESSION['missing'] = "Required fields are missing.";
-
         $response['error'] = true;
         $response['message'] = "Required fields are missing";
-
         header("location:../admin/users.php");
+
     }
 } else {
+    
     // wrong method
     $response['error'] = true;
     $response['message'] = "Invalid Request";

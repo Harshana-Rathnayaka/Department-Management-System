@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($result == 1) {
 
             // success
+            $_SESSION['success'] = "Department created successfully!";
             $response['error'] = false;
             $response['message'] = "Department created successfully!";
             header("location:../admin/index.php");
