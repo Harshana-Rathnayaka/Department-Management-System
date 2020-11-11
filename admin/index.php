@@ -380,8 +380,8 @@ unset($_SESSION['missing']);
 while ($row = mysqli_fetch_array($departments)):
 ?>
                       <tr>
-                        <td> <?php echo $row['id']; ?> </td>
-                        <td> <?php echo $row['name']; ?> </td>
+                        <td> <?php echo $row['department_id']; ?> </td>
+                        <td> <?php echo $row['department_name']; ?> </td>
                         <td>
                           <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit btnEditDepartment"></i></button>
                         </td>

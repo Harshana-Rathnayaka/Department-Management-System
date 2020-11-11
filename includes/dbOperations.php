@@ -56,7 +56,7 @@ class DbOperations
             // department exists
             return 0;
         } else {
-            $stmt = $this->con->prepare("INSERT INTO `departments` (`id`, `name`) VALUES (NULL, ?);");
+            $stmt = $this->con->prepare("INSERT INTO `departments` (`department_id`, `department_name`) VALUES (NULL, ?);");
             $stmt->bind_param("s", $name);
 
             if ($stmt->execute()) {
@@ -207,7 +207,7 @@ class DbOperations
     // checking if the department exists
     private function isDepartmentExist($name)
     {
-        $stmt = $this->con->prepare("SELECT `id` FROM `departments` WHERE `name` = ?");
+        $stmt = $this->con->prepare("SELECT `department_id` FROM `departments` WHERE `department_name` = ?");
         $stmt->bind_param("s", $name);
         $stmt->execute();
         $stmt->store_result();
@@ -302,7 +302,7 @@ class DbOperations
     // retrieving users table
     public function getUsers()
     {
-        $stmt = $this->con->prepare("SELECT * FROM `users` INNER JOIN `departments` ON departments.id = users.department_id WHERE `status` = 1 AND `user_type` != 0");
+        $stmt = $this->con->prepare("SELECT * FROM `users` INNER JOIN `departments` ON departments.department_id = users.department_id WHERE `user_type` != 0");
         $stmt->execute();
         return $stmt->get_result();
     }
@@ -354,20 +354,20 @@ class DbOperations
         }
     }
 
-    // activate or deactivate user account by updating user status from admin side
-    public function updateUserStatus($user_id, $status)
-    {
-        $stmt = $this->con->prepare("UPDATE `users` SET `user_status` = ? WHERE `id` = ?");
-        $stmt->bind_param("ii", $status, $user_id);
+    // // activate or deactivate user account by updating user status from admin side
+    // public function updateUserStatus($user_id, $status)
+    // {
+    //     $stmt = $this->con->prepare("UPDATE `users` SET `user_status` = ? WHERE `id` = ?");
+    //     $stmt->bind_param("ii", $status, $user_id);
 
-        if ($stmt->execute()) {
-            // user account status updated by admin
-            return 0;
-        } else {
-            // some error
-            return 1;
-        }
-    }
+    //     if ($stmt->execute()) {
+    //         // user account status updated by admin
+    //         return 0;
+    //     } else {
+    //         // some error
+    //         return 1;
+    //     }
+    // }
 
     // confirm or refund order by updating order status from admin side
     public function updateOrderStatus($order_id, $status)
@@ -429,14 +429,14 @@ class DbOperations
         }
     }
 
-    // update colours
-    public function updateColour($colour_id, $colour)
+    // update user status (Activating and Suspending)
+    public function updateUserStatus($user_id, $user_status)
     {
-        $stmt = $this->con->prepare("UPDATE `colours` SET `colour` = ? WHERE `id` = ?");
-        $stmt->bind_param("si", $colour, $colour_id);
+        $stmt = $this->con->prepare("UPDATE `users` SET `status` = ? WHERE `id` = ?");
+        $stmt->bind_param("ii", $user_status, $user_id);
 
         if ($stmt->execute()) {
-            // colour updated
+            // user status updated
             return 0;
         } else {
             // some error
@@ -447,7 +447,7 @@ class DbOperations
     // update departments
     public function updateDepartments($department_id, $department_name)
     {
-        $stmt = $this->con->prepare("UPDATE `departments` SET `name` = ? WHERE `id` = ?");
+        $stmt = $this->con->prepare("UPDATE `departments` SET `department_name` = ? WHERE `department_id` = ?");
         $stmt->bind_param("si", $department_name, $department_id);
 
         if ($stmt->execute()) {
