@@ -444,14 +444,14 @@ class DbOperations
         }
     }
 
-    // update manufacturers
-    public function updateManufacturer($manufacturer_id, $name, $address, $email, $contact)
+    // update departments
+    public function updateDepartments($department_id, $department_name)
     {
-        $stmt = $this->con->prepare("UPDATE `manufacturers` SET `name` = ?, `address` = ?, `email` = ?, `contact` = ? WHERE `make_id` = ?");
-        $stmt->bind_param("ssssi", $name, $address, $email, $contact, $manufacturer_id);
+        $stmt = $this->con->prepare("UPDATE `departments` SET `name` = ? WHERE `id` = ?");
+        $stmt->bind_param("si", $department_name, $department_id);
 
         if ($stmt->execute()) {
-            // manufacturer updated
+            // department updated
             return 0;
         } else {
             // some error
