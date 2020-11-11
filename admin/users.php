@@ -1,3 +1,22 @@
+<?php
+session_start();
+if (!isset($_SESSION['UserName'])) {
+    $_SESSION['error'] = "Session timed out. Please login to continue.";
+    header('location:../signin.php');
+} elseif (isset($_SESSION['UserType'])) {
+    $usertype = $_SESSION['UserType'];
+
+    // if ($usertype == 1) {
+    //   header('location:../leader/index.php');
+    // } else if ($usertype == 2) {
+    //   header('location:../manager/index.php');
+    // } else if ($usertype == 3) {
+    //   header('location:../finance/index.php');
+    // }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -37,6 +56,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
   <script src="assets/plugins/nprogress/nprogress.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 
@@ -223,7 +243,52 @@ $user_count = mysqli_num_rows($users);
             </div>
           </div>
 
-          <!-- Form Modal -->
+
+          <?php
+if (@$_SESSION['success'] == true) {
+    $success = $_SESSION['success'];
+    ?>
+          <script>
+            swal({
+              title: "SUCCESS!",
+              text: "<?php echo $success; ?>",
+              icon: "success",
+              button: "OK",
+            });
+          </script>
+        <?php
+unset($_SESSION['success']);
+} elseif (@$_SESSION['error'] == true) {
+    $error = $_SESSION['error'];
+    ?>
+        <script>
+          swal({
+            title: "ERROR!",
+            text: "<?php echo $error; ?>",
+            icon: "warning",
+            button: "OK",
+          });
+        </script>
+        <?php
+unset($_SESSION['error']);
+} elseif (@$_SESSION['missing'] == true) {
+    $missing = $_SESSION['missing'];
+    ?>
+          <script>
+            swal({
+              title: "INFO!",
+              text: "<?php echo $missing; ?>",
+              icon: "info",
+              button: "OK",
+            });
+          </script>
+        <?php
+unset($_SESSION['missing']);
+}
+?>
+
+
+          <!-- Add New User Form Modal -->
           <div class="modal fade" id="newDepartmentForm" tabindex="-1" role="dialog"
             aria-labelledby="newDepartmentFormTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -278,21 +343,59 @@ include '../api/getLists.php';
 if ($departmentList):
     while ($row = mysqli_fetch_array($departmentList)):
     ?>
-							                    <option value="<?php echo $row['id']; ?>"> <?php echo $row['name']; ?></option>
-							                <?php
+											                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
+											                <?php
 endwhile;
 endif;
 ?>
                       </select>
                       <small class="form-text text-muted">This is the department of the new User.</small>
                     </div>
-
                     <button type="submit" name="btnCreateUser" class="btn btn-block btn-primary">Submit</button>
                   </form>
                 </div>
                 <div class="modal-footer">
-                  <!-- <button type="button" class="btn btn-danger btn-pill" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary btn-pill">Save Changes</button> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Edit User Form Modal -->
+          <div class="modal fade" id="editUserForm" tabindex="-1" role="dialog"
+            aria-labelledby="editUserFormTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editUserFormTitle">Update User Status</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="../api/editUser.php" method="POST">
+
+                  <input type="hidden" name="editUserId" id="editUserId">
+
+                    <div class="form-group">
+                      <label for="editFullName">Full Name</label>
+                      <input type="text" class="form-control" disabled name="editFullName" id="editFullName"
+                        aria-describedby="editFullNameHelp" placeholder="Enter the name">
+                      <small id="editFullNameHelp" class="form-text text-muted">This is the name of the
+                        User.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="editUserStatus">Account Status</label>
+                      <select class="form-control" name="editUserStatus" id="editUserStatus">
+                        <option value="1">Activate</option>
+                        <option value="0">Suspend</option>
+                      </select>
+                      <small class="form-text text-muted">This is the status of the account.</small>
+                    </div>
+                    <button type="submit" name="editUserBtn" class="btn btn-block btn-primary">Submit</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
                 </div>
               </div>
             </div>
@@ -309,18 +412,17 @@ endif;
                     New user
                   </button>
                 </div>
-<br><br>
+                <hr>
                 <div class="card-body pt-0 pb-5">
-                  <table class="table card-table table-hover table-responsive table-responsive-large"
+                  <table class="table table-hover table-responsive table-responsive-large"
                     style="width:100%" id="userTable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Full Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
                         <th>Department</th>
                         <th>Type</th>
+                        <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -333,9 +435,7 @@ while ($row = mysqli_fetch_array($users)):
                       <tr>
                         <td><?php echo $row['id']; ?></td>
                         <td ><?php echo $row['fullname']; ?></td>
-                        <td><?php echo $row['username']; ?></td>
-                        <td ><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
+                        <td><?php echo $row['department_name']; ?></td>
                         <?php
 $user_type = $row['user_type'];
 if ($user_type == 1):
@@ -347,7 +447,7 @@ if ($user_type == 1):
 elseif ($user_type == 2):
 ?>
                           <td>
-                          <span class="badge badge-success text-uppercase">Department Manager</span>
+                          <span class="badge badge-primary text-uppercase">Department Manager</span>
                         </td>
                         <?php
 elseif ($user_type == 3):
@@ -357,9 +457,25 @@ elseif ($user_type == 3):
                         </td>
                         <?php
 endif;
+
+$status = $row['status'];
+if ($status == 1):
 ?>
+  <td>
+                          <span class="badge badge-success text-uppercase">Active</span>
+                        </td>
+                        <?php
+elseif ($status == 0):
+?>
+<td>
+                          <span class="badge badge-danger text-uppercase">Suspended</span>
+                        </td>
+                        <?php
+endif;
+?>
+
                         <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
+                          <button class="btn btn-dark btn-sm"><i class="mdi mdi-tooltip-edit btnEditUser"></i></button>
                           <!-- <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button> -->
                         </td>
                       </tr>
@@ -424,6 +540,26 @@ endwhile;
       $('#userTable').DataTable({
         "lengthMenu": [5, 10],
       });
+    });
+  </script>
+
+  <!-- open edit user modal on button click -->
+<script>
+    $('.btnEditUser').on('click', function() {
+
+      $('#editUserForm').modal('show');
+
+      $tr = $(this).closest('tr');
+
+      var data = $tr.children('td').map(function() {
+        return $(this).text();
+      }).get();
+
+      console.log(data);
+
+      $('#editUserId').val(data[0]);
+      $('#editFullName').val(data[1]);
+
     });
   </script>
 
