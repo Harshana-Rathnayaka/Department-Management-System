@@ -131,10 +131,10 @@ class DbOperations
     }
 
     // adding to orders
-    public function addToOrders($user_id, $make, $model, $quantity, $total)
+    public function placeOrder($user_id, $department_id, $order_details)
     {
-        $stmt = $this->con->prepare("INSERT INTO `orders`(`user_id`, `make`, `model`, `quantity`, `paid_amount`) VALUES (?, ?, ?, ?, ?); ");
-        $stmt->bind_param("issii", $user_id, $make, $model, $quantity, $total);
+        $stmt = $this->con->prepare("INSERT INTO `orders`(`user_id`, `department_id`, `order_details`) VALUES (?, ?, ?); ");
+        $stmt->bind_param("iis", $user_id, $department_id, $order_details);
 
         if ($stmt->execute()) {
             // added to orders table
@@ -265,7 +265,7 @@ class DbOperations
     // retrieving orders table by user id
     public function getOrdersByUserId($user_id)
     {
-        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `users` ON users.id = orders.user_id
+        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
 		WHERE `user_id` = ? ORDER BY `order_id`");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
