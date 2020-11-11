@@ -172,7 +172,7 @@ if (!isset($_SESSION['UserName'])) {
                   <li class="dropdown-header">
                     <img src="assets/img/user/user.png" class="img-circle" alt="User Image" />
                     <div class="d-inline-block">
-                      Test Admin <small class="pt-1"><?php echo $_SESSION['Email']; ?></small>
+                    <?php echo $_SESSION['FullName']; ?> <small class="pt-1"><?php echo $_SESSION['Email']; ?></small>
                     </div>
                   </li>
                   <li>

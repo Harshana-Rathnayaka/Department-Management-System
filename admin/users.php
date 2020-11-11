@@ -164,14 +164,14 @@ if (!isset($_SESSION['UserName'])) {
               <li class="dropdown user-menu">
                 <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                   <img src="assets/img/user/user.png" class="user-image" alt="User Image" />
-                  <span class="d-none d-lg-inline-block">Admin</span>
+                  <span class="d-none d-lg-inline-block"><?php echo $_SESSION['FullName']; ?></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <!-- User image -->
                   <li class="dropdown-header">
                     <img src="assets/img/user/user.png" class="img-circle" alt="User Image" />
                     <div class="d-inline-block">
-                      Test Admin <small class="pt-1">test@gmail.com</small>
+                    <?php echo $_SESSION['FullName']; ?> <small class="pt-1"><?php echo $_SESSION['Email']; ?></small>
                     </div>
                   </li>
                   <li>
@@ -340,8 +340,8 @@ unset($_SESSION['missing']);
                       <select class="form-control" name="department" id="department">
                       <?php
 include '../api/getLists.php';
-if ($departmentList):
-    while ($row = mysqli_fetch_array($departmentList)):
+if ($departments):
+    while ($row = mysqli_fetch_array($departments)):
     ?>
 											                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
 											                <?php
