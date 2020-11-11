@@ -175,11 +175,11 @@ if (!isset($_SESSION['UserName'])) {
                     </div>
                   </li>
                   <li>
-                    <a href="#"> <i class="mdi mdi-settings"></i> Account Setting </a>
+                    <a href="settings.php"> <i class="mdi mdi-settings"></i> Account Settings </a>
                   </li>
 
                   <li class="dropdown-footer">
-                    <a href="signin.html"> <i class="mdi mdi-logout"></i> Log Out </a>
+                    <a href="../logout.php?logout"> <i class="mdi mdi-logout"></i> Log Out </a>
                   </li>
                 </ul>
               </li>

@@ -176,7 +176,7 @@ if (!isset($_SESSION['UserName'])) {
                     </div>
                   </li>
                   <li>
-                    <a href="#"> <i class="mdi mdi-settings"></i> Account Setting </a>
+                    <a href="settings.php"> <i class="mdi mdi-settings"></i> Account Settings </a>
                   </li>
 
                   <li class="dropdown-footer">
