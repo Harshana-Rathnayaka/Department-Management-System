@@ -266,7 +266,7 @@ class DbOperations
     public function getOrdersByUserId($user_id)
     {
         $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
-		WHERE `user_id` = ? ORDER BY `order_id`");
+		WHERE `user_id` = ? AND `order_status` != 3 ORDER BY `order_id`");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         return $stmt->get_result();
@@ -278,23 +278,6 @@ class DbOperations
         $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `users` ON users.id = orders.user_id
 		WHERE `user_id` = ? AND `order_status` = 0 ORDER BY `order_id`");
         $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
-
-    // retrieving pending orders to admin
-    public function getAllPendingOrders()
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `users` ON users.id = orders.user_id
-		WHERE `order_status` = 0 ORDER BY `timestamp`");
-        $stmt->execute();
-        return $stmt->get_result();
-    }
-
-    // retrieving all orders to admin
-    public function getAllOrders()
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `users` ON users.id = orders.user_id ORDER BY `timestamp`");
         $stmt->execute();
         return $stmt->get_result();
     }
@@ -414,14 +397,22 @@ class DbOperations
         }
     }
 
-    // update a vehicle
-    public function updateVehicleDetails($vehicle_id, $model, $year, $engine, $transmission, $horsepower, $condition, $seats, $price, $in_stock)
+    // update an order by user
+    public function updateOrderByUser($order_id, $order_details, $cancel)
     {
-        $stmt = $this->con->prepare("UPDATE `vehicles` SET `model` = ?, `year` = ?, `engine_capacity` = ?, `transmission` = ?, `horsepower` = ?, `vehicle_condition` = ?, `seats` = ?, `price` = ?, `in_stock` = ? WHERE `vehicle_id` = ?");
-        $stmt->bind_param("ssssssisss", $model, $year, $engine, $transmission, $horsepower, $condition, $seats, $price, $in_stock, $vehicle_id);
+        $status;
+
+        if ($cancel == null) {
+            $status = 0;
+        } else {
+            $status = $cancel;
+        }
+
+        $stmt = $this->con->prepare("UPDATE `orders` SET `order_details` = ?, `order_status` = ? WHERE `order_id` = ?");
+        $stmt->bind_param("sii", $order_details, $status, $order_id);
 
         if ($stmt->execute()) {
-            // vehicle updated
+            // order updated
             return 0;
         } else {
             // some error

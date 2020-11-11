@@ -306,8 +306,8 @@ include '../api/getLists.php';
 if ($departments):
     while ($row = mysqli_fetch_array($departments)):
     ?>
-																		                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
-																		                <?php
+																										                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
+																										                <?php
 endwhile;
 endif;
 ?>
@@ -315,9 +315,9 @@ endif;
                       <small class="form-text text-muted">This is the department for the new Order.</small>
                     </div>
                     <div class="form-group">
-                      <label for="password">Requirement</label>
+                      <label for="orderDetails">Requirement</label>
                       <textarea name="orderDetails" id="orderDetails" class="form-control" aria-describedby="orderDetailsHelp" rows="4" col="6" placeholder="Order details" required></textarea>
-                      <small id="orderDetailsHelp" class="form-text text-muted">These are the requirements of this Order.</small>
+                      <small id="orderDetailsHelp" class="form-text text-muted">These are the requirements of the new Order.</small>
                     </div>
                     <button type="submit" name="createOrderBtn" class="btn btn-block btn-primary">Place Order</button>
                   </form>
@@ -340,21 +340,30 @@ endif;
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form action="../api/updateOrder.php" method="POST">
+                  <form action="../api/editOrder.php" method="POST">
 
                   <input type="hidden" name="orderId" id="orderId">
 
                   <div class="form-group">
-                      <label for="orderStatus">Account Type</label>
-                      <select class="form-control" name="orderStatus" id="orderStatus">
-                        <option value="0">Cancel</option>
-                        <option value="1">Team Leader</option>
-                        <option value="2">Department Manager</option>
-                        <option value="3">Finance Manager</option>
-                      </select>
-                      <small class="form-text text-muted">This is the account type of the new User.</small>
+                      <label for="editOrderDepartment">Department</label>
+                      <input disabled type="text" class="form-control" name="editOrderDepartment" id="editOrderDepartment" required
+                        aria-describedby="editOrderDepartmentHelp" placeholder="Enter the name">
+                      <small id="editOrderDepartmentHelp" class="form-text text-muted">This is the department for the new Order.</small>
                     </div>
-                    <button type="submit" name="editOrderBtn" class="btn btn-block btn-primary">Submit</button>
+
+                    <div class="form-group">
+                      <label for="editOrderDetails">Requirement</label>
+                      <textarea name="editOrderDetails" id="editOrderDetails" class="form-control" aria-describedby="editOrderDetailsHelp" rows="4" col="6" placeholder="Order details" required></textarea>
+                      <small id="editOrderDetailsHelp" class="form-text text-muted">These are the requirements of this Order.</small>
+                    </div>
+
+                    <label class="control control-checkbox">Cancel Order
+											<input value="3" type="checkbox" id="cancelOrderCheckbox" name="cancelOrderCheckbox"/>
+												<div class="control-indicator"></div>
+										</label>
+
+
+                    <button type="submit" name="editOrderBtn" class="btn btn-block btn-primary">Update Order</button>
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -414,7 +423,7 @@ elseif ($order_status == 1):
 elseif ($order_status == 2):
 ?>
                           <td>
-                          <span class="badge badge-success text-uppercase">Completed</span>
+                          <span class="badge badge-success text-uppercase">Approved</span>
                         </td>
                         <?php
 elseif ($order_status == 3):
@@ -508,8 +517,9 @@ endwhile;
       console.log(data);
 
       $('#orderId').val(data[0]);
-      $('#editDepartmentName').val(data[1]);
-
+      $('#editOrderDepartment').val(data[1]);
+      $('#editOrderDetails').val(data[2]);
+      
     });
   </script>
 
