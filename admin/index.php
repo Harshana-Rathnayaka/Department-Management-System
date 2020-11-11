@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['User'])) {
+if (!isset($_SESSION['UserName'])) {
     $_SESSION['error'] = "Session timed out. Please login to continue.";
     header('location:../signin.php');
 } elseif (isset($_SESSION['UserType'])) {
@@ -25,7 +25,7 @@ if (!isset($_SESSION['User'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Department Management System</title>
+  <title>Inventory Management System</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500"
@@ -56,6 +56,8 @@ if (!isset($_SESSION['User'])) {
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
   <script src="assets/plugins/nprogress/nprogress.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </head>
 
 
@@ -124,7 +126,7 @@ if (!isset($_SESSION['User'])) {
 
         <ul class="nav sidebar-inner" id="sidebar-menu">
           <li class="active">
-            <a class="sidenav-item-link" href="index.html">
+            <a class="sidenav-item-link" href="../logout.php?logout">
               <i class="mdi mdi-exit-to-app"></i>
               <span class="nav-text">Logout</span>
             </a>
@@ -163,14 +165,14 @@ if (!isset($_SESSION['User'])) {
               <li class="dropdown user-menu">
                 <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                   <img src="assets/img/user/user.png" class="user-image" alt="User Image" />
-                  <span class="d-none d-lg-inline-block">Admin</span>
+                  <span class="d-none d-lg-inline-block"><?php echo $_SESSION['FullName']; ?></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
                   <!-- User image -->
                   <li class="dropdown-header">
                     <img src="assets/img/user/user.png" class="img-circle" alt="User Image" />
                     <div class="d-inline-block">
-                      Test Admin <small class="pt-1">test@gmail.com</small>
+                      Test Admin <small class="pt-1"><?php echo $_SESSION['Email']; ?></small>
                     </div>
                   </li>
                   <li>
@@ -178,7 +180,7 @@ if (!isset($_SESSION['User'])) {
                   </li>
 
                   <li class="dropdown-footer">
-                    <a href="signin.html"> <i class="mdi mdi-logout"></i> Log Out </a>
+                    <a href="../logout.php?logout"> <i class="mdi mdi-logout"></i> Log Out </a>
                   </li>
                 </ul>
               </li>
@@ -244,7 +246,52 @@ $user_count = mysqli_num_rows($users);
             </div>
           </div>
 
-          <!-- Form Modal -->
+
+          <?php
+if (@$_SESSION['success'] == true) {
+    $success = $_SESSION['success'];
+    ?>
+          <script>
+            swal({
+              title: "SUCCESS!",
+              text: "<?php echo $success; ?>",
+              icon: "success",
+              button: "OK",
+            });
+          </script>
+        <?php
+unset($_SESSION['success']);
+} elseif (@$_SESSION['error'] == true) {
+    $error = $_SESSION['error'];
+    ?>
+        <script>
+          swal({
+            title: "ERROR!",
+            text: "<?php echo $error; ?>",
+            icon: "warning",
+            button: "OK",
+          });
+        </script>
+        <?php
+unset($_SESSION['error']);
+} elseif (@$_SESSION['missing'] == true) {
+    $missing = $_SESSION['missing'];
+    ?>
+          <script>
+            swal({
+              title: "INFO!",
+              text: "<?php echo $missing; ?>",
+              icon: "info",
+              button: "OK",
+            });
+          </script>
+        <?php
+unset($_SESSION['missing']);
+}
+?>
+
+
+          <!-- Add New Department Form Modal -->
           <div class="modal fade" id="newDepartmentForm" tabindex="-1" role="dialog"
             aria-labelledby="newDepartmentFormTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -264,12 +311,42 @@ $user_count = mysqli_num_rows($users);
                       <small id="departmentNameHelp" class="form-text text-muted">This is the name of the
                         Department.</small>
                     </div>
-
                     <button type="submit" name="createDepartmentBtn" class="btn btn-block btn-primary">Submit</button>
                   </form>
                 </div>
                 <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
 
+          <!-- Edit Department Form Modal -->
+          <div class="modal fade" id="editDepartmentForm" tabindex="-1" role="dialog"
+            aria-labelledby="editDepartmentFormTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editDepartmentFormTitle">Edit Department</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="../api/editDepartment.php" method="POST">
+
+                  <input type="hidden" name="departmentId" id="departmentId">
+
+                    <div class="form-group">
+                      <label for="editDepartmentName">Department name</label>
+                      <input type="text" class="form-control" name="editDepartmentName" id="editDepartmentName" required
+                        aria-describedby="editDepartmentNameHelp" placeholder="Enter the name">
+                      <small id="editDepartmentNameHelp" class="form-text text-muted">This is the name of the
+                        Department.</small>
+                    </div>
+                    <button type="submit" name="editDepartmentBtn" class="btn btn-block btn-primary">Submit</button>
+                  </form>
+                </div>
+                <div class="modal-footer">
                 </div>
               </div>
             </div>
@@ -278,7 +355,6 @@ $user_count = mysqli_num_rows($users);
           <div class="row">
             <div class="col-12">
               <div class="card card-table-border-none" id="recent-orders">
-
                 <div class="card-header justify-content-between">
                   <button type="button" class="btn btn-info text-uppercase btn-lg" data-toggle="modal"
                     data-target="#newDepartmentForm">
@@ -286,7 +362,8 @@ $user_count = mysqli_num_rows($users);
                     New department
                   </button>
                 </div>
-<br> <br> 
+                <hr>
+
                 <div class="card-body pt-0 pb-5">
                   <table class="table card-table table-hover table-responsive table-responsive-large"
                     style="width:100%" id="departmentTable">
@@ -303,11 +380,10 @@ $user_count = mysqli_num_rows($users);
 while ($row = mysqli_fetch_array($departments)):
 ?>
                       <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
+                        <td> <?php echo $row['id']; ?> </td>
+                        <td> <?php echo $row['name']; ?> </td>
                         <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit"></i></button>
-                          <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
+                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit btnEditDepartment"></i></button>
                         </td>
                       </tr>
 
@@ -374,8 +450,25 @@ endwhile;
     });
   </script>
 
+<!-- open edit department modal on button click -->
+<script>
+    $('.btnEditDepartment').on('click', function() {
 
+      $('#editDepartmentForm').modal('show');
+
+      $tr = $(this).closest('tr');
+
+      var data = $tr.children('td').map(function() {
+        return $(this).text();
+      }).get();
+
+      console.log(data);
+
+      $('#departmentId').val(data[0]);
+      $('#editDepartmentName').val(data[1]);
+
+    });
+  </script>
 
 </body>
-
 </html>
