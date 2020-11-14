@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $response['message'] = "Logged in successfully!";
                     $response['user_type'] = $user['user_type'];
 
-                    header("location:../department/index.php");
+                    header("location:../manager/index.php");
 
                     // finance manager account
                 } elseif ($user['user_type'] == 3) {
