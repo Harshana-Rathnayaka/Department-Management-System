@@ -18,13 +18,15 @@ if (!isset($_POST['editOrderBtn'])) {
 
     // getting the values
     $order_id = $_POST['orderId'];
+    $item = $_POST['editItem'];
+    $quantity = $_POST['editQuantity'];
     $order_details = $_POST['editOrderDetails'];
     $cancel = $_POST['cancelOrderCheckbox'];
 
     // db object
     $db = new DbOperations();
 
-    $result = $db->updateOrderByUser($order_id, $order_details, $cancel);
+    $result = $db->updateOrderByUser($order_id, $item, $quantity, $order_details, $cancel);
 
     if ($result == 1) {
         // some error

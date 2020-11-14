@@ -306,13 +306,23 @@ include '../api/getLists.php';
 if ($departments):
     while ($row = mysqli_fetch_array($departments)):
     ?>
-																										                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
-																										                <?php
+											        <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
+														<?php
 endwhile;
 endif;
 ?>
                       </select>
                       <small class="form-text text-muted">This is the department for the new Order.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="item">Item</label>
+                      <input name="item" id="item" class="form-control" aria-describedby="itemHelp" placeholder="Item name" required>
+                      <small id="itemHelp" class="form-text text-muted">This is the item required.</small>
+                    </div>
+                    <div class="form-group">
+                      <label for="quantity">Quantity</label>
+                      <input name="quantity" id="quantity" class="form-control" aria-describedby="quantityHelp" placeholder="Amount required" required>
+                      <small id="quantityHelp" class="form-text text-muted">This is the quantity required.</small>
                     </div>
                     <div class="form-group">
                       <label for="orderDetails">Requirement</label>
@@ -348,7 +358,19 @@ endif;
                       <label for="editOrderDepartment">Department</label>
                       <input disabled type="text" class="form-control" name="editOrderDepartment" id="editOrderDepartment" required
                         aria-describedby="editOrderDepartmentHelp" placeholder="Enter the name">
-                      <small id="editOrderDepartmentHelp" class="form-text text-muted">This is the department for the new Order.</small>
+                      <small id="editOrderDepartmentHelp" class="form-text text-muted">This is the department for this Order.</small>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="editItem">Item</label>
+                      <input name="editItem" id="editItem" class="form-control" aria-describedby="editItemHelp" placeholder="Order details" required>
+                      <small id="editItemHelp" class="form-text text-muted">This is the item required.</small>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="editQuantity">Quantity</label>
+                      <input name="editQuantity" id="editQuantity" class="form-control" aria-describedby="editQuantityHelp" placeholder="Order details" required>
+                      <small id="editQuantityHelp" class="form-text text-muted">This is the quantity required.</small>
                     </div>
 
                     <div class="form-group">
@@ -391,6 +413,8 @@ endif;
                       <tr>
                         <th scope="col">#</th>
                         <th scope="col">Department</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">Details</th>
                         <th scope="col">Status</th>
                         <th>Action</th>
@@ -404,6 +428,8 @@ while ($row = mysqli_fetch_array($orders)):
                       <tr>
                         <td> <?php echo $row['order_id']; ?> </td>
                         <td> <?php echo $row['department_name']; ?> </td>
+                        <td> <?php echo $row['item']; ?> </td>
+                        <td> <?php echo $row['quantity']; ?> </td>
                         <td> <?php echo $row['order_details']; ?> </td>
                         <?php
 
@@ -435,7 +461,7 @@ elseif ($order_status == 3):
 endif;
 ?>
                         <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit btnEditOrder"></i></button>
+                          <button class="btn btn-dark btn-sm"><i class="mdi mdi-tooltip-edit btnEditOrder"></i></button>
                         </td>
                       </tr>
 
@@ -518,8 +544,10 @@ endwhile;
 
       $('#orderId').val(data[0]);
       $('#editOrderDepartment').val(data[1]);
-      $('#editOrderDetails').val(data[2]);
-      
+      $('#editItem').val(data[2]);
+      $('#editQuantity').val(data[3]);
+      $('#editOrderDetails').val(data[4]);
+
     });
   </script>
 

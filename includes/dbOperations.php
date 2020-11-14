@@ -131,10 +131,10 @@ class DbOperations
     }
 
     // adding to orders
-    public function placeOrder($user_id, $department_id, $order_details)
+    public function placeOrder($user_id, $department_id, $item, $quantity, $order_details)
     {
-        $stmt = $this->con->prepare("INSERT INTO `orders`(`user_id`, `department_id`, `order_details`) VALUES (?, ?, ?); ");
-        $stmt->bind_param("iis", $user_id, $department_id, $order_details);
+        $stmt = $this->con->prepare("INSERT INTO `orders`(`user_id`, `department_id`, `item`, `quantity`, `order_details`) VALUES (?, ?, ?, ?, ?); ");
+        $stmt->bind_param("iisss", $user_id, $department_id, $item, $quantity, $order_details);
 
         if ($stmt->execute()) {
             // added to orders table
@@ -398,7 +398,7 @@ class DbOperations
     }
 
     // update an order by user
-    public function updateOrderByUser($order_id, $order_details, $cancel)
+    public function updateOrderByUser($order_id, $item, $quantity, $order_details, $cancel)
     {
         $status;
 
@@ -408,8 +408,8 @@ class DbOperations
             $status = $cancel;
         }
 
-        $stmt = $this->con->prepare("UPDATE `orders` SET `order_details` = ?, `order_status` = ? WHERE `order_id` = ?");
-        $stmt->bind_param("sii", $order_details, $status, $order_id);
+        $stmt = $this->con->prepare("UPDATE `orders` SET `item` = ?, `quantity` = ?, `order_details` = ?, `order_status` = ? WHERE `order_id` = ?");
+        $stmt->bind_param("sssii", $item, $quantity, $order_details, $status, $order_id);
 
         if ($stmt->execute()) {
             // order updated

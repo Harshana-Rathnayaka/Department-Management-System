@@ -6,18 +6,23 @@ require_once '../includes/dbOperations.php';
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_SESSION['Id']) && isset($_POST['department']) && isset($_POST['orderDetails'])) {
+    if (isset($_SESSION['Id']) && isset($_POST['department']) && isset($_POST['orderDetails'])
+        && isset($_POST['item']) && $_POST['quantity']) {
 
         // we can operate the data further
         $db = new DbOperations();
 
         $user_id = $_SESSION['Id'];
         $department_id = $_POST['department'];
+        $item = $_POST['item'];
+        $quantity = $_POST['quantity'];
         $order_details = $_POST['orderDetails'];
 
         $result = $db->placeOrder(
             $user_id,
             $department_id,
+            $item,
+            $quantity,
             $order_details
         );
 
