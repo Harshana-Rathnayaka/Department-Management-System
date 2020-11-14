@@ -246,15 +246,6 @@ class DbOperations
     ======= TEAM LEADER ========
      */
 
-    // retrieving orders table by user id
-    public function getOrdersByUserId($user_id)
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
-		WHERE `user_id` = ? AND `order_status` != 3 AND `order_status` != 2 ORDER BY `order_id`");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
     // retrieving pending orders by user id
     public function getPendingOrdersByUserId($user_id)
     {
@@ -294,7 +285,6 @@ class DbOperations
         $stmt->execute();
         return $stmt->get_result();
     }
-
 
     /*
     ======= DEPARTMENT MANAGER ========

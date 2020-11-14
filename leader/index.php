@@ -424,7 +424,7 @@ endif;
                     <tbody>
 
 <?php
-while ($row = mysqli_fetch_array($orders_leader)):
+while ($row = mysqli_fetch_array($pending_orders_leader)):
 ?>
                       <tr>
                         <td> <?php echo $row['order_id']; ?> </td>

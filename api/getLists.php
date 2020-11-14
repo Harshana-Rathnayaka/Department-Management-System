@@ -17,7 +17,6 @@ if (isset($_SESSION['Id']) && isset($_SESSION['UserDepartment'])) {
     $orders_admin = $db->getOrders();
 
     // lists for leader
-    $orders_leader = $db->getOrdersByUserId($user_id);
     $pending_orders_leader = $db->getPendingOrdersByUserId($user_id);
     $cancelled_orders_leader = $db->getCancelledOrdersByUserId($user_id);
     $completed_orders_leader = $db->getCompletedOrdersByUserId($user_id);
