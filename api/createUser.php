@@ -37,13 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $response['message'] = "User created successfully!";
             $_SESSION['success'] = "User created successfully!";
 
-            $_SESSION['User'] = $_POST['username'];
-            $_SESSION['FullName'] = $_POST['fullname'];
-            $_SESSION['Email'] = $_POST['email'];
-            $_SESSION['Id'] = $user['id'];
-            $_SESSION['UserType'] = $user['user_type'];
-            $_SESSION['UserType'] = $user['department_id'];
-
             header("location:../admin/users.php");
         } elseif ($result == 2) {
 
