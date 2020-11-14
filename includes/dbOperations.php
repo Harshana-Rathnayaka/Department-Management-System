@@ -273,9 +273,46 @@ class DbOperations
     }
 
     // retrieving orders table by department id for specific user
-    public function getOrdersByDepartment($department_id) {
+    public function getOrdersByDepartment($department_id)
+    {
         $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE `department_id` = ? AND `order_status` = 0");
         $stmt->bind_param("s", $department_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    /*
+    ======= FINANCE DEPARTMENT ========
+     */
+
+    // retrieving the approved orders table for the finance department
+    public function getPendingOrdersForFinance()
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE `order_status` = 1");
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieveing all time orders for finance department
+    public function getAllOrdersForFinance()
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders`");
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving all the cancelled orders for finance department
+    public function getCancelledOrdersForFinance()
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE  `order_status` = 3");
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving all the completed orders for finance department
+    public function getCompletedOrdersForFinance()
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE  `order_status` = 2");
         $stmt->execute();
         return $stmt->get_result();
     }
@@ -361,7 +398,6 @@ class DbOperations
     // }
 
     // confirm or refund order by updating order status from admin side
-    
 
     // update admin details
     public function updateAdminAccountDetails($userid, $firstname, $lastname, $username, $email)

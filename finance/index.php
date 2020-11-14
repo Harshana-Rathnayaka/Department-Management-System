@@ -187,10 +187,10 @@ if (!isset($_SESSION['UserName'])) {
       <?php
 
 require_once '../api/getLists.php';
-$department_count = mysqli_num_rows($departments);
-$user_count = mysqli_num_rows($users);
-$order_count = mysqli_num_rows($orders);
-
+$all_orders_count = mysqli_num_rows($all_orders_finance);
+$pending_orders_count = mysqli_num_rows($pending_orders_finance);
+$rejected_orders_count = mysqli_num_rows($rejected_orders_finance);
+$completed_orders_count = mysqli_num_rows($completed_orders_finance);
 ?>
 
 
@@ -202,9 +202,9 @@ $order_count = mysqli_num_rows($orders);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
-                  <i class="mdi mdi-city mr-4 text-white"></i>
-                  <h3 class="text-white my-2"><?php echo $department_count; ?></h3>
-                  <p>Departments</p>
+                  <i class="mdi mdi-cart mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $all_orders_count; ?></h3>
+                  <p>All Orders</p>
                 </div>
               </div>
             </div>
@@ -212,8 +212,8 @@ $order_count = mysqli_num_rows($orders);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-warning border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-multiple mr-4 text-white"></i>
-                  <h3 class="text-white my-2"><?php echo $user_count; ?></h3>
+                  <i class="mdi mdi-basket-fill mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $pending_orders_count; ?></h3>
                   <p>Pending Orders</p>
                 </div>
               </div>
@@ -222,9 +222,9 @@ $order_count = mysqli_num_rows($orders);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-success border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2"><?php echo $order_count; ?></h3>
-                  <p>All Orders</p>
+                  <i class="mdi mdi-clipboard-check mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $completed_orders_count; ?></h3>
+                  <p>Completed Orders</p>
                 </div>
               </div>
             </div>
@@ -232,8 +232,8 @@ $order_count = mysqli_num_rows($orders);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-danger border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
+                  <i class="mdi mdi-cart-off mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $rejected_orders_count; ?></h3>
                   <p>Cancelled Orders</p>
                 </div>
               </div>
@@ -284,113 +284,14 @@ unset($_SESSION['missing']);
 }
 ?>
 
-
-          <!-- Add New Order Form Modal -->
-          <div class="modal fade" id="newOrderForm" tabindex="-1" role="dialog"
-            aria-labelledby="newOrderFormTitle" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="newOrderFormTitle">New Order</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form action="../api/createOrder.php" method="POST">
-                  <div class="form-group">
-                      <label for="department">Department</label>
-                      <select class="form-control" name="department" id="department">
-                      <?php
-include '../api/getLists.php';
-if ($departments):
-    while ($row = mysqli_fetch_array($departments)):
-    ?>
-																										                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
-																										                <?php
-endwhile;
-endif;
-?>
-                      </select>
-                      <small class="form-text text-muted">This is the department for the new Order.</small>
-                    </div>
-                    <div class="form-group">
-                      <label for="orderDetails">Requirement</label>
-                      <textarea name="orderDetails" id="orderDetails" class="form-control" aria-describedby="orderDetailsHelp" rows="4" col="6" placeholder="Order details" required></textarea>
-                      <small id="orderDetailsHelp" class="form-text text-muted">These are the requirements of the new Order.</small>
-                    </div>
-                    <button type="submit" name="createOrderBtn" class="btn btn-block btn-primary">Place Order</button>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Edit Order Form Modal -->
-          <div class="modal fade" id="editOrderForm" tabindex="-1" role="dialog"
-            aria-labelledby="editOrderFormTitle" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="editOrderFormTitle">Edit Order</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form action="../api/editOrder.php" method="POST">
-
-                  <input type="hidden" name="orderId" id="orderId">
-
-                  <div class="form-group">
-                      <label for="editOrderDepartment">Department</label>
-                      <input disabled type="text" class="form-control" name="editOrderDepartment" id="editOrderDepartment" required
-                        aria-describedby="editOrderDepartmentHelp" placeholder="Enter the name">
-                      <small id="editOrderDepartmentHelp" class="form-text text-muted">This is the department for the new Order.</small>
-                    </div>
-
-                    <div class="form-group">
-                      <label for="editOrderDetails">Requirement</label>
-                      <textarea name="editOrderDetails" id="editOrderDetails" class="form-control" aria-describedby="editOrderDetailsHelp" rows="4" col="6" placeholder="Order details" required></textarea>
-                      <small id="editOrderDetailsHelp" class="form-text text-muted">These are the requirements of this Order.</small>
-                    </div>
-
-                    <label class="control control-checkbox">Cancel Order
-											<input value="3" type="checkbox" id="cancelOrderCheckbox" name="cancelOrderCheckbox"/>
-												<div class="control-indicator"></div>
-										</label>
-
-
-                    <button type="submit" name="editOrderBtn" class="btn btn-block btn-primary">Update Order</button>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-12">
-              <div class="card card-table-border-none" id="recent-orders">
-                <div class="card-header justify-content-between">
-                  <button type="button" class="btn btn-info text-uppercase btn-lg" data-toggle="modal"
-                    data-target="#newOrderForm">
-                    <i class="mdi mdi-cart"></i>
-                    Place New Order
-                  </button>
-                </div>
-                <hr>
-
                 <div class="card-body pt-0 pb-5">
                   <table class="table card-table table-hover table-responsive table-responsive-large"
                     style="width:100%" id="departmentTable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Department</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">Details</th>
                         <th scope="col">Status</th>
                         <th>Action</th>
@@ -399,11 +300,12 @@ endif;
                     <tbody>
 
 <?php
-while ($row = mysqli_fetch_array($orders)):
+while ($row = mysqli_fetch_array($pending_orders_finance)):
 ?>
                       <tr>
                         <td> <?php echo $row['order_id']; ?> </td>
-                        <td> <?php echo $row['department_name']; ?> </td>
+                        <td> <?php echo $row['item']; ?> </td>
+                        <td> <?php echo $row['quantity']; ?> </td>
                         <td> <?php echo $row['order_details']; ?> </td>
                         <?php
 
@@ -434,8 +336,12 @@ elseif ($order_status == 3):
                         <?php
 endif;
 ?>
-                        <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit btnEditOrder"></i></button>
+                       <td>
+                          <form action="../api/editOrder.php" method="POST">
+                            <input name="orderId" type="hidden" value="<?php echo $row['order_id']; ?>">
+                            <button type="submit" name="approveOrderFinance" class="btn btn-outline-success btn-sm"><i class="mdi mdi-check"></i></button>
+                            <button type="submit" name="rejectOrderFinance" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
+                          </form>
                         </td>
                       </tr>
 
@@ -519,7 +425,7 @@ endwhile;
       $('#orderId').val(data[0]);
       $('#editOrderDepartment').val(data[1]);
       $('#editOrderDetails').val(data[2]);
-      
+
     });
   </script>
 

@@ -23,6 +23,12 @@ if (isset($_SESSION['Id']) && isset($_SESSION['UserDepartment'])) {
     // orders by department
     $department_orders = $db->getOrdersByDepartment($department_id);
 
+    // orders for finance department
+    $pending_orders_finance = $db->getPendingOrdersForFinance();
+    $rejected_orders_finance = $db->getCancelledOrdersForFinance();
+    $completed_orders_finance = $db->getCompletedOrdersForFinance();
+    $all_orders_finance = $db->getAllOrdersForFinance();
+
 } else {
     $_SESSION['error'] = "Session timed out. Please login to continue.";
     $response['error'] = true;
