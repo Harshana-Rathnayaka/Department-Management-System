@@ -476,7 +476,7 @@ endif;
 ?>
 
                         <td>
-                          <button class="btn btn-dark btn-sm btnEditUser"><i class="mdi mdi-tooltip-edit"></i></button>
+                          <button class="btn btn-dark btn-sm btnEditUser"><i class="mdi mdi-account-edit"></i></button>
                           <!-- <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button> -->
                         </td>
                       </tr>

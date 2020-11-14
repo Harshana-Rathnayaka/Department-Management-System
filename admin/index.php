@@ -384,7 +384,7 @@ while ($row = mysqli_fetch_array($departments_admin)):
                         <td> <?php echo $row['department_id']; ?> </td>
                         <td> <?php echo $row['department_name']; ?> </td>
                         <td>
-                          <button class="btn btn-dark btn-sm btnEditDepartment"><i class="mdi mdi-tooltip-edit"></i></button>
+                          <button class="btn btn-dark btn-sm btnEditDepartment"><i class="mdi mdi-square-edit-outline"></i></button>
                         </td>
                       </tr>
 

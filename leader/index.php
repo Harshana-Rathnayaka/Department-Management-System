@@ -462,7 +462,7 @@ elseif ($order_status == 3):
 endif;
 ?>
                         <td>
-                          <button class="btn btn-dark btn-sm btnEditOrder"><i class="mdi mdi-tooltip-edit"></i></button>
+                          <button class="btn btn-dark btn-sm btnEditOrder"><i class="mdi mdi-square-edit-outline"></i></button>
                         </td>
                       </tr>
 
