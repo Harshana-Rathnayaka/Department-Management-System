@@ -214,6 +214,10 @@ class DbOperations
         return $stmt->num_rows > 0;
     }
 
+    /*
+    ======= ADMIN ========
+     */
+
     // retrieving departments table
     public function getDepartments()
     {
@@ -222,60 +226,111 @@ class DbOperations
         return $stmt->get_result();
     }
 
-    // retrieving colours table
-    public function getColours()
+    // retrieving users table
+    public function getUsers()
     {
-        $stmt = $this->con->prepare("SELECT * FROM `colours`");
+        $stmt = $this->con->prepare("SELECT * FROM `users` INNER JOIN `departments` ON departments.department_id = users.department_id WHERE `user_type` != 0");
         $stmt->execute();
         return $stmt->get_result();
     }
 
-    // retrieving vehicles table
-    public function getVehicles()
+    // retrieving orders table
+    public function getOrders()
     {
-        $stmt = $this->con->prepare("SELECT * FROM `vehicles` INNER JOIN `manufacturers` ON manufacturers.make_id = vehicles.make INNER JOIN `colours` ON colours.id = vehicles.colour INNER JOIN `transmissions` ON transmissions.id = vehicles.transmission ORDER BY `vehicle_id`");
+        $stmt = $this->con->prepare("SELECT * FROM `orders`");
         $stmt->execute();
         return $stmt->get_result();
     }
 
-    // retrieving wishlist table
-    public function getWishlistByUserId($user_id)
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `wishlist` INNER JOIN `users` ON users.id = wishlist.user_id INNER JOIN
-		vehicles ON vehicles.vehicle_id = wishlist.vehicle_id INNER JOIN `manufacturers` ON manufacturers.make_id = wishlist.make_id
-		 WHERE `user_id` = ? ORDER BY `wishlist_id`
-		");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
-
-    // retrieving cart table
-    public function getCartByUserId($user_id)
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `cart` INNER JOIN `users` ON users.id = cart.user_id INNER JOIN
-		vehicles ON vehicles.vehicle_id = cart.vehicle_id INNER JOIN `manufacturers` ON manufacturers.make_id = cart.make_id
-		WHERE `user_id` = ? ORDER BY `cart_id`
-		");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        return $stmt->get_result();
-    }
+    /*
+    ======= TEAM LEADER ========
+     */
 
     // retrieving orders table by user id
     public function getOrdersByUserId($user_id)
     {
         $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
-		WHERE `user_id` = ? AND `order_status` != 3 ORDER BY `order_id`");
+		WHERE `user_id` = ? AND `order_status` != 3 AND `order_status` != 2 ORDER BY `order_id`");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+    // retrieving pending orders by user id
+    public function getPendingOrdersByUserId($user_id)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
+		WHERE `user_id` = ? AND `order_status` = 0 ORDER BY `order_id`");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         return $stmt->get_result();
     }
 
-    // retrieving orders table by department id for specific user
-    public function getOrdersByDepartment($department_id)
+    // retrieving cancelled orders by user id
+    public function getCancelledOrdersByUserId($user_id)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
+		WHERE `user_id` = ? AND `order_status` = 3 ORDER BY `order_id`");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving completed orders by user id
+    public function getCompletedOrdersByUserId($user_id)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
+		WHERE `user_id` = ? AND `order_status` = 2 ORDER BY `order_id`");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving completed orders by user id
+    public function getAllOrdersByUserId($user_id)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
+		WHERE `user_id` = ? ORDER BY `order_id`");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+
+    /*
+    ======= DEPARTMENT MANAGER ========
+     */
+
+    // retrieving all orders by department id
+    public function getAllOrdersByDepartment($department_id)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE `department_id` = ?");
+        $stmt->bind_param("s", $department_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving all pending orders by department id
+    public function getPendingOrdersByDepartment($department_id)
     {
         $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE `department_id` = ? AND `order_status` = 0");
+        $stmt->bind_param("s", $department_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving all rejected orders by department id
+    public function getRejectedOrdersByDepartment($department_id)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE `department_id` = ? AND `order_status` = 3");
+        $stmt->bind_param("s", $department_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving all the completed orders by department id
+    public function getCompletedOrdersByDepartment($department_id)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE `department_id` = ? AND `order_status` = 2");
         $stmt->bind_param("s", $department_id);
         $stmt->execute();
         return $stmt->get_result();
@@ -327,14 +382,6 @@ class DbOperations
         return $stmt->get_result();
     }
 
-    // retrieving users table
-    public function getUsers()
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `users` INNER JOIN `departments` ON departments.department_id = users.department_id WHERE `user_type` != 0");
-        $stmt->execute();
-        return $stmt->get_result();
-    }
-
     // getting the orders count by user
     public function getOrdersCountByUserId($user_id)
     {
@@ -349,16 +396,6 @@ class DbOperations
     public function getCartCountByUserId($user_id)
     {
         $stmt = $this->con->prepare("SELECT * FROM `cart` WHERE `user_id` = ?");
-        $stmt->bind_param("i", $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return mysqli_num_rows($result);
-    }
-
-    // getting the wishlist count by user
-    public function getWishlistCountByUserId($user_id)
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `wishlist` WHERE `user_id` = ?");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -381,23 +418,6 @@ class DbOperations
             return 1;
         }
     }
-
-    // // activate or deactivate user account by updating user status from admin side
-    // public function updateUserStatus($user_id, $status)
-    // {
-    //     $stmt = $this->con->prepare("UPDATE `users` SET `user_status` = ? WHERE `id` = ?");
-    //     $stmt->bind_param("ii", $status, $user_id);
-
-    //     if ($stmt->execute()) {
-    //         // user account status updated by admin
-    //         return 0;
-    //     } else {
-    //         // some error
-    //         return 1;
-    //     }
-    // }
-
-    // confirm or refund order by updating order status from admin side
 
     // update admin details
     public function updateAdminAccountDetails($userid, $firstname, $lastname, $username, $email)

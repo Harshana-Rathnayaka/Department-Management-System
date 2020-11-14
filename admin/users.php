@@ -193,8 +193,9 @@ if (!isset($_SESSION['UserName'])) {
       <?php
 
 require_once '../api/getLists.php';
-$department_count = mysqli_num_rows($departments);
-$user_count = mysqli_num_rows($users);
+$department_count = mysqli_num_rows($departments_admin);
+$user_count = mysqli_num_rows($users_admin);
+$order_count = mysqli_num_rows($orders_admin);
 
 ?>
       <div class="content-wrapper">
@@ -202,7 +203,7 @@ $user_count = mysqli_num_rows($users);
 
           <!-- Top Statistics -->
           <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
                   <i class="mdi mdi-city mr-4 text-white"></i>
@@ -223,17 +224,17 @@ $user_count = mysqli_num_rows($users);
             </div>
 
             <div class="col-md-6 col-lg-6 col-xl-3">
-              <div class="card widget-block p-4 rounded bg-danger border">
+              <div class="card widget-block p-4 rounded bg-success border">
                 <div class="card-block">
                   <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
-                  <p>New Users</p>
+                  <h3 class="text-white my-2"><?php echo $order_count; ?></h3>
+                  <p>Orders</p>
                 </div>
               </div>
             </div>
 
             <div class="col-md-6 col-lg-6 col-xl-3">
-              <div class="card widget-block p-4 rounded bg-success border">
+              <div class="card widget-block p-4 rounded bg-secondary border">
                 <div class="card-block">
                   <i class="mdi mdi-account-outline mr-4 text-white"></i>
                   <h3 class="text-white my-2">5300</h3>
@@ -340,8 +341,8 @@ unset($_SESSION['missing']);
                       <select class="form-control" name="department" id="department">
                       <?php
 include '../api/getLists.php';
-if ($departments):
-    while ($row = mysqli_fetch_array($departments)):
+if ($departments_admin):
+    while ($row = mysqli_fetch_array($departments_admin)):
     ?>
 											                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
 											                <?php
@@ -429,7 +430,7 @@ endif;
                     <tbody>
 
                     <?php
-while ($row = mysqli_fetch_array($users)):
+while ($row = mysqli_fetch_array($users_admin)):
 ?>
 
                       <tr>

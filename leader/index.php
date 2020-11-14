@@ -187,9 +187,10 @@ if (!isset($_SESSION['UserName'])) {
       <?php
 
 require_once '../api/getLists.php';
-$department_count = mysqli_num_rows($departments);
-$user_count = mysqli_num_rows($users);
-$order_count = mysqli_num_rows($orders);
+$all_order_count = mysqli_num_rows($all_orders_leader);
+$pending_order_count = mysqli_num_rows($pending_orders_leader);
+$cancelled_order_count = mysqli_num_rows($cancelled_orders_leader);
+$completed_order_count = mysqli_num_rows($completed_orders_leader);
 
 ?>
 
@@ -199,12 +200,12 @@ $order_count = mysqli_num_rows($orders);
 
           <!-- Top Statistics -->
           <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
-                  <i class="mdi mdi-city mr-4 text-white"></i>
-                  <h3 class="text-white my-2"><?php echo $department_count; ?></h3>
-                  <p>Departments</p>
+                  <i class="mdi mdi-clipboard-check mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $all_order_count; ?></h3>
+                  <p>All Orders</p>
                 </div>
               </div>
             </div>
@@ -212,8 +213,8 @@ $order_count = mysqli_num_rows($orders);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-warning border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-multiple mr-4 text-white"></i>
-                  <h3 class="text-white my-2"><?php echo $user_count; ?></h3>
+                  <i class="mdi mdi-basket-fill mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $pending_order_count; ?></h3>
                   <p>Pending Orders</p>
                 </div>
               </div>
@@ -222,9 +223,9 @@ $order_count = mysqli_num_rows($orders);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-success border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2"><?php echo $order_count; ?></h3>
-                  <p>All Orders</p>
+                  <i class="mdi mdi-clipboard-check mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $completed_order_count; ?></h3>
+                  <p>Completed Orders</p>
                 </div>
               </div>
             </div>
@@ -232,8 +233,8 @@ $order_count = mysqli_num_rows($orders);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-danger border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
+                  <i class="mdi mdi-cart-off mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $cancelled_order_count; ?></h3>
                   <p>Cancelled Orders</p>
                 </div>
               </div>
@@ -303,11 +304,11 @@ unset($_SESSION['missing']);
                       <select class="form-control" name="department" id="department">
                       <?php
 include '../api/getLists.php';
-if ($departments):
-    while ($row = mysqli_fetch_array($departments)):
+if ($departments_admin):
+    while ($row = mysqli_fetch_array($departments_admin)):
     ?>
-											        <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
-														<?php
+												        <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
+															<?php
 endwhile;
 endif;
 ?>
@@ -400,7 +401,7 @@ endif;
                 <div class="card-header justify-content-between">
                   <button type="button" class="btn btn-info text-uppercase btn-lg" data-toggle="modal"
                     data-target="#newOrderForm">
-                    <i class="mdi mdi-cart"></i>
+                    <i class="mdi mdi-cart-plus"></i>
                     Place New Order
                   </button>
                 </div>
@@ -423,7 +424,7 @@ endif;
                     <tbody>
 
 <?php
-while ($row = mysqli_fetch_array($orders)):
+while ($row = mysqli_fetch_array($orders_leader)):
 ?>
                       <tr>
                         <td> <?php echo $row['order_id']; ?> </td>

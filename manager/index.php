@@ -187,8 +187,10 @@ if (!isset($_SESSION['UserName'])) {
       <?php
 
 require_once '../api/getLists.php';
-$order_count = mysqli_num_rows($orders);
-
+$all_orders_count = mysqli_num_rows($all_orders_department);
+$pending_orders_count = mysqli_num_rows($pending_orders_department);
+$rejected_orders_count = mysqli_num_rows($rejected_orders_department);
+$completed_orders_count = mysqli_num_rows($completed_orders_department);
 ?>
 
 
@@ -201,8 +203,8 @@ $order_count = mysqli_num_rows($orders);
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
                   <i class="mdi mdi-cart mr-4 text-white"></i>
-                  <h3 class="text-white my-2"><?php echo $order_count; ?></h3>
-                  <p>Orders</p>
+                  <h3 class="text-white my-2"><?php echo $all_orders_count; ?></h3>
+                  <p>All Orders</p>
                 </div>
               </div>
             </div>
@@ -211,7 +213,7 @@ $order_count = mysqli_num_rows($orders);
               <div class="card widget-block p-4 rounded bg-warning border">
                 <div class="card-block">
                   <i class="mdi mdi-basket-fill mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5</h3>
+                  <h3 class="text-white my-2"><?php echo $pending_orders_count; ?></h3>
                   <p>Pending Orders</p>
                 </div>
               </div>
@@ -221,7 +223,7 @@ $order_count = mysqli_num_rows($orders);
               <div class="card widget-block p-4 rounded bg-success border">
                 <div class="card-block">
                   <i class="mdi mdi-clipboard-check mr-4 text-white"></i>
-                  <h3 class="text-white my-2">3</h3>
+                  <h3 class="text-white my-2"><?php echo $completed_orders_count; ?></h3>
                   <p>Completed Orders</p>
                 </div>
               </div>
@@ -231,7 +233,7 @@ $order_count = mysqli_num_rows($orders);
               <div class="card widget-block p-4 rounded bg-danger border">
                 <div class="card-block">
                   <i class="mdi mdi-cart-off mr-4 text-white"></i>
-                  <h3 class="text-white my-2">10</h3>
+                  <h3 class="text-white my-2"><?php echo $rejected_orders_count; ?></h3>
                   <p>Cancelled Orders</p>
                 </div>
               </div>
@@ -287,10 +289,10 @@ unset($_SESSION['missing']);
             <div class="col-12">
               <div class="card card-table-border-none" id="recent-orders">
 
-<br>
+                <br>
                 <div class="card-body pt-0 pb-5">
                   <table class="table card-table table-hover table-responsive table-responsive-large"
-                    style="width:100%" id="departmentTable">
+                    style="width:100%" id="ordersTable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -304,7 +306,7 @@ unset($_SESSION['missing']);
                     <tbody>
 
 <?php
-while ($row = mysqli_fetch_array($department_orders)):
+while ($row = mysqli_fetch_array($pending_orders_department)):
 ?>
                       <tr>
                         <td> <?php echo $row['order_id']; ?> </td>
@@ -406,7 +408,7 @@ endwhile;
 
   <script>
     $(document).ready(function() {
-      $('#departmentTable').DataTable({
+      $('#ordersTable').DataTable({
         "lengthMenu": [5, 10],
       });
     });

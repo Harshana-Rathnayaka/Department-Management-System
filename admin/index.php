@@ -194,8 +194,9 @@ if (!isset($_SESSION['UserName'])) {
       <?php
 
 require_once '../api/getLists.php';
-$department_count = mysqli_num_rows($departments);
-$user_count = mysqli_num_rows($users);
+$department_count = mysqli_num_rows($departments_admin);
+$user_count = mysqli_num_rows($users_admin);
+$order_count = mysqli_num_rows($orders_admin);
 
 ?>
 
@@ -226,17 +227,17 @@ $user_count = mysqli_num_rows($users);
             </div>
 
             <div class="col-md-6 col-lg-6 col-xl-3">
-              <div class="card widget-block p-4 rounded bg-danger border">
+              <div class="card widget-block p-4 rounded bg-success border">
                 <div class="card-block">
                   <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
-                  <p>New Users</p>
+                  <h3 class="text-white my-2"><?php echo $order_count; ?></h3>
+                  <p>Orders</p>
                 </div>
               </div>
             </div>
 
             <div class="col-md-6 col-lg-6 col-xl-3">
-              <div class="card widget-block p-4 rounded bg-success border">
+              <div class="card widget-block p-4 rounded bg-secondary border">
                 <div class="card-block">
                   <i class="mdi mdi-account-outline mr-4 text-white"></i>
                   <h3 class="text-white my-2">5300</h3>
@@ -377,7 +378,7 @@ unset($_SESSION['missing']);
                     <tbody>
 
 <?php
-while ($row = mysqli_fetch_array($departments)):
+while ($row = mysqli_fetch_array($departments_admin)):
 ?>
                       <tr>
                         <td> <?php echo $row['department_id']; ?> </td>

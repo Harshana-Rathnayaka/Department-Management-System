@@ -11,17 +11,23 @@ if (isset($_SESSION['Id']) && isset($_SESSION['UserDepartment'])) {
     // db object
     $db = new DbOperations();
 
-    // department list
-    $departments = $db->getDepartments();
+    // lists for admin
+    $departments_admin = $db->getDepartments();
+    $users_admin = $db->getUsers();
+    $orders_admin = $db->getOrders();
 
-    // users list
-    $users = $db->getUsers();
+    // lists for leader
+    $orders_leader = $db->getOrdersByUserId($user_id);
+    $pending_orders_leader = $db->getPendingOrdersByUserId($user_id);
+    $cancelled_orders_leader = $db->getCancelledOrdersByUserId($user_id);
+    $completed_orders_leader = $db->getCompletedOrdersByUserId($user_id);
+    $all_orders_leader = $db->getAllOrdersByUserId($user_id);
 
-    // orders lits
-    $orders = $db->getOrdersByUserId($user_id);
-
-    // orders by department
-    $department_orders = $db->getOrdersByDepartment($department_id);
+    // orders for departments by department id
+    $all_orders_department = $db->getAllOrdersByDepartment($department_id);
+    $pending_orders_department = $db->getPendingOrdersByDepartment($department_id);
+    $rejected_orders_department = $db->getRejectedOrdersByDepartment($department_id);
+    $completed_orders_department = $db->getCompletedOrdersByDepartment($department_id);
 
     // orders for finance department
     $pending_orders_finance = $db->getPendingOrdersForFinance();
