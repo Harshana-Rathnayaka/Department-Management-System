@@ -408,26 +408,5 @@ endwhile;
     });
   </script>
 
-<!-- open edit department modal on button click -->
-<script>
-    $('.btnEditOrder').on('click', function() {
-
-      $('#editOrderForm').modal('show');
-
-      $tr = $(this).closest('tr');
-
-      var data = $tr.children('td').map(function() {
-        return $(this).text();
-      }).get();
-
-      console.log(data);
-
-      $('#orderId').val(data[0]);
-      $('#editOrderDepartment').val(data[1]);
-      $('#editOrderDetails').val(data[2]);
-
-    });
-  </script>
-
 </body>
 </html>
