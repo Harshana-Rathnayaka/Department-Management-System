@@ -272,6 +272,14 @@ class DbOperations
         return $stmt->get_result();
     }
 
+    // retrieving orders table by department id for specific user
+    public function getOrdersByDepartment($department_id) {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` WHERE `department_id` = ? AND `order_status` = 0");
+        $stmt->bind_param("s", $department_id);
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
     // retrieving pending orders to user
     public function getPendingOrdersById($user_id)
     {
@@ -353,19 +361,7 @@ class DbOperations
     // }
 
     // confirm or refund order by updating order status from admin side
-    public function updateOrderStatus($order_id, $status)
-    {
-        $stmt = $this->con->prepare("UPDATE `orders` SET `order_status` = ? WHERE `order_id` = ?");
-        $stmt->bind_param("ii", $status, $order_id);
-
-        if ($stmt->execute()) {
-            // user account status updated by admin
-            return 0;
-        } else {
-            // some error
-            return 1;
-        }
-    }
+    
 
     // update admin details
     public function updateAdminAccountDetails($userid, $firstname, $lastname, $username, $email)
@@ -413,6 +409,21 @@ class DbOperations
 
         if ($stmt->execute()) {
             // order updated
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+    }
+
+    // update an order by managers and finance department
+    public function updateOrderStatus($order_id, $status)
+    {
+        $stmt = $this->con->prepare("UPDATE `orders` SET `order_status` = ? WHERE `order_id` = ?");
+        $stmt->bind_param("ii", $status, $order_id);
+
+        if ($stmt->execute()) {
+            // order status updated by managers and finance departmet manager
             return 0;
         } else {
             // some error

@@ -294,7 +294,8 @@ unset($_SESSION['missing']);
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Department</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
                         <th scope="col">Details</th>
                         <th scope="col">Status</th>
                         <th>Action</th>
@@ -303,11 +304,12 @@ unset($_SESSION['missing']);
                     <tbody>
 
 <?php
-while ($row = mysqli_fetch_array($orders)):
+while ($row = mysqli_fetch_array($department_orders)):
 ?>
                       <tr>
                         <td> <?php echo $row['order_id']; ?> </td>
-                        <td> <?php echo $row['department_name']; ?> </td>
+                        <td> <?php echo $row['item']; ?> </td>
+                        <td> <?php echo $row['quantity']; ?> </td>
                         <td> <?php echo $row['order_details']; ?> </td>
                         <?php
 
@@ -339,7 +341,11 @@ elseif ($order_status == 3):
 endif;
 ?>
                         <td>
-                          <button class="btn btn-primary btn-sm"><i class="mdi mdi-tooltip-edit btnEditOrder"></i></button>
+                          <form action="../api/editOrder.php" method="POST">
+                            <input name="orderId" type="hidden" value="<?php echo $row['order_id']; ?>">
+                            <button type="submit" name="approveOrderManager" class="btn btn-outline-success btn-sm"><i class="mdi mdi-check"></i></button>
+                            <button type="submit" name="rejectOrderManager" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
+                          </form>
                         </td>
                       </tr>
 
@@ -403,27 +409,6 @@ endwhile;
       $('#departmentTable').DataTable({
         "lengthMenu": [5, 10],
       });
-    });
-  </script>
-
-<!-- open edit department modal on button click -->
-<script>
-    $('.btnEditOrder').on('click', function() {
-
-      $('#editOrderForm').modal('show');
-
-      $tr = $(this).closest('tr');
-
-      var data = $tr.children('td').map(function() {
-        return $(this).text();
-      }).get();
-
-      console.log(data);
-
-      $('#orderId').val(data[0]);
-      $('#editOrderDepartment').val(data[1]);
-      $('#editOrderDetails').val(data[2]);
-
     });
   </script>
 

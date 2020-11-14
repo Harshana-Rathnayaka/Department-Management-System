@@ -3,9 +3,10 @@
 require_once '../includes/dbOperations.php';
 $response = array();
 
-if (isset($_SESSION['Id'])) {
+if (isset($_SESSION['Id']) && isset($_SESSION['UserDepartment'])) {
 
     $user_id = $_SESSION['Id'];
+    $department_id = $_SESSION['UserDepartment'];
 
     // db object
     $db = new DbOperations();
@@ -18,6 +19,9 @@ if (isset($_SESSION['Id'])) {
 
     // orders lits
     $orders = $db->getOrdersByUserId($user_id);
+
+    // orders by department
+    $department_orders = $db->getOrdersByDepartment($department_id);
 
 } else {
     $_SESSION['error'] = "Session timed out. Please login to continue.";

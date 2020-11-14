@@ -30,10 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['Email'] = $user['email'];
                     $_SESSION['Id'] = $user['id'];
                     $_SESSION['UserType'] = $user['user_type'];
+                    $_SESSION['UserDepartment'] = $user['department_id'];
 
                     $response['error'] = false;
                     $response['message'] = "Logged in successfully!";
                     $response['user_type'] = $user['user_type'];
+                    $response['user_department'] = $user['department_id'];
 
                     header("location:../admin/index.php");
 
@@ -46,10 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['Email'] = $user['email'];
                     $_SESSION['Id'] = $user['id'];
                     $_SESSION['UserType'] = $user['user_type'];
+                    $_SESSION['UserDepartment'] = $user['department_id'];
 
                     $response['error'] = false;
                     $response['message'] = "Logged in successfully!";
                     $response['user_type'] = $user['user_type'];
+                    $response['user_department'] = $user['department_id'];
 
                     header("location:../leader/index.php");
 
@@ -62,10 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['Email'] = $user['email'];
                     $_SESSION['Id'] = $user['id'];
                     $_SESSION['UserType'] = $user['user_type'];
+                    $_SESSION['UserDepartment'] = $user['department_id'];
 
                     $response['error'] = false;
                     $response['message'] = "Logged in successfully!";
                     $response['user_type'] = $user['user_type'];
+                    $response['user_department'] = $user['department_id'];
 
                     header("location:../manager/index.php");
 
@@ -78,10 +84,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['Email'] = $user['email'];
                     $_SESSION['Id'] = $user['id'];
                     $_SESSION['UserType'] = $user['user_type'];
+                    $_SESSION['UserDepartment'] = $user['department_id'];
 
                     $response['error'] = false;
                     $response['message'] = "Logged in successfully!";
                     $response['user_type'] = $user['user_type'];
+                    $response['user_department'] = $user['department_id'];
 
                     header("location:../finance/index.php");
 
