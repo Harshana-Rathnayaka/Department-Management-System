@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $response['message'] = "Your account is not of a valid type.";
                 }
             } else {
-                $_SESSION['error'] = "Your account is deleted. Please create a new account or contact the administrator.";
+                $_SESSION['error'] = "Your account has been suspended. Please contact the administrator.";
                 header("location:../signin.php");
 
                 $response['error'] = true;
