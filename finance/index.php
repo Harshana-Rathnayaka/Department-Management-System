@@ -284,9 +284,16 @@ unset($_SESSION['missing']);
 }
 ?>
 
+
+          <div class="row">
+            <div class="col-12">
+              <div class="card card-table-border-none" id="recent-orders">
+
+                <br>
+
                 <div class="card-body pt-0 pb-5">
                   <table class="table card-table table-hover table-responsive table-responsive-large"
-                    style="width:100%" id="departmentTable">
+                    style="width:100%" id="ordersTable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
@@ -402,7 +409,7 @@ endwhile;
 
   <script>
     $(document).ready(function() {
-      $('#departmentTable').DataTable({
+      $('#ordersTable').DataTable({
         "lengthMenu": [5, 10],
       });
     });
