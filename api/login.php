@@ -22,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // current time and ip address
         $time = time() - 30;
         $formatted_time = date('Y-m-d h:i:s', $time);
-        $user_ip = $ip->getIPAddress();
+        $ip_address = $ip->getIPAddress();
 
         // login attempts count from db
-        $login_row = $db->getLoginAttempts($formatted_time, $user_ip);
+        $login_row = $db->getLoginAttempts($formatted_time, $ip_address);
         $total_login_count = $login_row['total_count'];
 
         // if the login count is 3, then lock the user for 30 seconds
@@ -128,18 +128,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // if password is incorrect
                 $total_login_count++;
                 $remaining_attempts = 3 - $total_login_count;
-                $ip_address = $ip->getIPAddress();
                 $timestamp = date('Y-m-d h:i:s', time());
 
-                // updating login attempts in db
-                $db->updateLoginAttempts($ip_address, $timestamp);
+                if ($remaining_attempts == 0) {
 
-                $_SESSION['error'] = "The username or password you entered is incorrect. Please check again. You have " . $remaining_attempts .
-                    " attempts remaining.";
-                header("location:../signin.php");
-                $response["error"] = true;
-                $response["message"] = "The username or password you entered is incorrect. Please check again. You have " . $remaining_attempts .
-                    " attempts remaining.";
+                    $_SESSION['error'] = "Too many failed login attempts, please try again after 30 seconds.";
+                    header("location:../signin.php");
+                    $response['error'] = true;
+                    $response['message'] = "Too many failed login attempts, please try again after 30 seconds.";
+
+                } else {
+
+                    // updating login attempts in db
+                    $db->updateLoginAttempts($ip_address, $timestamp);
+
+                    $_SESSION['error'] = "The username or password you entered is incorrect. Please check again. You have " . $remaining_attempts .
+                        " attempts remaining.";
+                    header("location:../signin.php");
+                    $response["error"] = true;
+                    $response["message"] = "The username or password you entered is incorrect. Please check again. You have " . $remaining_attempts .
+                        " attempts remaining.";
+
+                }
 
             }
         }
