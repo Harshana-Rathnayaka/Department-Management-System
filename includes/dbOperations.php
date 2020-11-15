@@ -38,6 +38,22 @@ class DbOperations
         }
     }
 
+    // addding new email
+    public function createEmail($name, $email)
+    {
+        $stmt = $this->con->prepare("INSERT INTO `senior_managers`(`senior_manager_id`, `senior_manager_name`, `senior_manager_email`) VALUES (NULL, ?, ?);");
+        $stmt->bind_param("ss", $name, $email);
+
+        if ($stmt->execute()) {
+            // email created
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+
+    }
+
     // user login
     public function userLogin($username, $pass)
     {
@@ -292,6 +308,14 @@ class DbOperations
     public function getOrders()
     {
         $stmt = $this->con->prepare("SELECT * FROM `orders`");
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving emails table
+    public function getEmails()
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `senior_managers`");
         $stmt->execute();
         return $stmt->get_result();
     }
@@ -554,6 +578,21 @@ class DbOperations
 
         if ($stmt->execute()) {
             // department updated
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+    }
+
+    // update senior management accounts
+    public function updateEmail($senior_manager_id, $senior_manager_name, $senior_manager_email)
+    {
+        $stmt = $this->con->prepare("UPDATE `senior_managers` SET `senior_manager_name` = ?, `senior_manager_email` = ? WHERE `senior_manager_id` = ?");
+        $stmt->bind_param("ssi", $senior_manager_name, $senior_manager_email, $senior_manager_id);
+
+        if ($stmt->execute()) {
+            // senior manager account updated
             return 0;
         } else {
             // some error

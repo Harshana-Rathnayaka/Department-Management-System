@@ -25,7 +25,7 @@ if (!isset($_SESSION['UserName'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Inventory Management System</title>
+  <title>Department Management System</title>
 
   <!-- GOOGLE FONTS -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500|Poppins:400,500,600,700|Roboto:400,500"
@@ -57,7 +57,6 @@ if (!isset($_SESSION['UserName'])) {
   <![endif]-->
   <script src="assets/plugins/nprogress/nprogress.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 </head>
 
 
@@ -77,13 +76,12 @@ if (!isset($_SESSION['UserName'])) {
           =====================================
         -->
         <?php
-$currentPage = 'departments';
+$currentPage = 'send-reports';
 include 'sidebar.php';
 ?>
 
 
     <div class="page-wrapper">
-
       <!-- Header -->
       <?php
 
@@ -93,16 +91,15 @@ require_once '../api/getLists.php';
 $department_count = mysqli_num_rows($departments_admin);
 $user_count = mysqli_num_rows($users_admin);
 $order_count = mysqli_num_rows($orders_admin);
+$email_count = mysqli_num_fields($emails_admin);
 
 ?>
-
-
       <div class="content-wrapper">
         <div class="content">
 
           <!-- Top Statistics -->
           <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
                   <i class="mdi mdi-city mr-4 text-white"></i>
@@ -188,27 +185,32 @@ unset($_SESSION['missing']);
 ?>
 
 
-          <!-- Add New Department Form Modal -->
-          <div class="modal fade" id="newDepartmentForm" tabindex="-1" role="dialog"
-            aria-labelledby="newDepartmentFormTitle" aria-hidden="true">
+          <!-- Add New Email Form Modal -->
+          <div class="modal fade" id="newEmailForm" tabindex="-1" role="dialog"
+            aria-labelledby="newEmailFormTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="newDepartmentFormTitle">Add New Department</h5>
+                  <h5 class="modal-title" id="newEmailFormTitle">Add New Email</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form action="../api/createDepartment.php" method="POST">
+                  <form action="../api/createEmail.php" method="POST">
                     <div class="form-group">
-                      <label for="departmentName">Department name</label>
-                      <input type="text" class="form-control" name="departmentName" id="departmentName" required
-                        aria-describedby="departmentNameHelp" placeholder="Enter the name">
-                      <small id="departmentNameHelp" class="form-text text-muted">This is the name of the
-                        Department.</small>
+                      <label for="fullname">Name</label>
+                      <input type="text" class="form-control" name="name" id="name" aria-describedby="nameHelp" required
+                        placeholder="Enter the name">
+                      <small id="nameHelp" class="form-text text-muted">This is the name of the Senior Manager.</small>
                     </div>
-                    <button type="submit" name="createDepartmentBtn" class="btn btn-block btn-primary">Save</button>
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" required
+                        placeholder="Enter the email">
+                      <small id="emailHelp" class="form-text text-muted">This is the email of the Senior Manager.</small>
+                    </div>
+                    <button type="submit" name="btnCreateEmail" class="btn btn-block btn-primary">Save</button>
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -217,30 +219,37 @@ unset($_SESSION['missing']);
             </div>
           </div>
 
-          <!-- Edit Department Form Modal -->
-          <div class="modal fade" id="editDepartmentForm" tabindex="-1" role="dialog"
-            aria-labelledby="editDepartmentFormTitle" aria-hidden="true">
+
+          <!-- Edit Email Form Modal -->
+          <div class="modal fade" id="editEmailForm" tabindex="-1" role="dialog"
+            aria-labelledby="editEmailFormTitle" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="editDepartmentFormTitle">Edit Department</h5>
+                  <h5 class="modal-title" id="editEmailFormTitle">Update Senior Manager Details</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-                  <form action="../api/editDepartment.php" method="POST">
+                  <form action="../api/editEmail.php" method="POST">
 
-                  <input type="hidden" name="departmentId" id="departmentId">
+                  <input type="hidden" name="editSeniorManagerId" id="editSeniorManagerId">
 
                     <div class="form-group">
-                      <label for="editDepartmentName">Department name</label>
-                      <input type="text" class="form-control" name="editDepartmentName" id="editDepartmentName" required
-                        aria-describedby="editDepartmentNameHelp" placeholder="Enter the name">
-                      <small id="editDepartmentNameHelp" class="form-text text-muted">This is the name of the
-                        Department.</small>
+                      <label for="editName">Name</label>
+                      <input type="text" class="form-control" name="editName" id="editName"
+                        aria-describedby="editNameHelp" placeholder="Enter the name">
+                      <small id="editNameHelp" class="form-text text-muted">This is the name of the
+                        Senior Manager.</small>
                     </div>
-                    <button type="submit" name="editDepartmentBtn" class="btn btn-block btn-primary">Save</button>
+                    <div class="form-group">
+                      <label for="editEmail">Email</label>
+                      <input type="editEmail" class="form-control" name="editEmail" id="editEmail" aria-describedby="editEmailHelp" required
+                        placeholder="Enter the editEmail">
+                      <small id="emailHelp" class="form-text text-muted">This is the email of the Senior Manager.</small>
+                    </div>
+                    <button type="submit" name="editEmailBtn" class="btn btn-block btn-primary">Save</button>
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -252,38 +261,41 @@ unset($_SESSION['missing']);
           <div class="row">
             <div class="col-12">
               <div class="card card-table-border-none" id="recent-orders">
+
                 <div class="card-header justify-content-between">
                   <button type="button" class="btn btn-info text-uppercase btn-lg" data-toggle="modal"
-                    data-target="#newDepartmentForm">
-                    <i class="mdi mdi-plus-box"></i>
-                    New department
+                    data-target="#newEmailForm">
+                    <i class="mdi mdi-account-box"></i>
+                    New Email Address
                   </button>
                 </div>
                 <hr>
-
                 <div class="card-body pt-0 pb-5">
-                  <table class="table card-table table-hover table-responsive table-responsive-large"
-                    style="width:100%" id="departmentTable">
+                  <table class="table table-hover table-responsive table-responsive-large"
+                    style="width:100%" id="emailTable">
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Department Name</th>
+                        <th scope="col">Name</th>
+                        <th>Email</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
 
-<?php
-while ($row = mysqli_fetch_array($departments_admin)):
+                    <?php
+while ($row = mysqli_fetch_array($emails_admin)):
 ?>
+
                       <tr>
-                        <td> <?php echo $row['department_id']; ?> </td>
-                        <td> <?php echo $row['department_name']; ?> </td>
+                        <td><?php echo $row['senior_manager_id']; ?></td>
+                        <td ><?php echo $row['senior_manager_name']; ?></td>
+                        <td><?php echo $row['senior_manager_email']; ?></td>
                         <td>
-                          <button class="btn btn-dark btn-sm btnEditDepartment"><i class="mdi mdi-square-edit-outline"></i></button>
+                          <button class="btn btn-dark btn-sm btnEditEmail"><i class="mdi mdi-account-edit"></i></button>
+                          <!-- <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button> -->
                         </td>
                       </tr>
-
                       <?php
 endwhile;
 ?>
@@ -326,19 +338,20 @@ endwhile;
   <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 
+
   <script>
     $(document).ready(function() {
-      $('#departmentTable').DataTable({
+      $('#emailTable').DataTable({
         "lengthMenu": [5, 10],
       });
     });
   </script>
 
-<!-- open edit department modal on button click -->
+  <!-- open edit user modal on button click -->
 <script>
-    $('.btnEditDepartment').on('click', function() {
+    $('.btnEditEmail').on('click', function() {
 
-      $('#editDepartmentForm').modal('show');
+      $('#editEmailForm').modal('show');
 
       $tr = $(this).closest('tr');
 
@@ -348,11 +361,15 @@ endwhile;
 
       console.log(data);
 
-      $('#departmentId').val(data[0]);
-      $('#editDepartmentName').val(data[1]);
+      $('#editSeniorManagerId').val(data[0]);
+      $('#editName').val(data[1]);
+      $('#editEmail').val(data[2]);
 
     });
   </script>
 
+
+
 </body>
+
 </html>

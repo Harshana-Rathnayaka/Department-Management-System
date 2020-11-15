@@ -33,6 +33,13 @@
               </a>
             </li>
 
+            <li class="<?php if($currentPage =='send-reports'){echo 'active';}?>">
+              <a class="sidenav-item-link" href="send-reports.php">
+                <i class="mdi mdi-email"></i>
+                <span class="nav-text">Send Reports</span>
+              </a>
+            </li>
+
             <li class="<?php if($currentPage =='settings'){echo 'active';}?>">
               <a class="sidenav-item-link" href="settings.php">
                 <i class="mdi mdi-settings"></i>

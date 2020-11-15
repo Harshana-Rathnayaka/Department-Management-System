@@ -247,7 +247,7 @@ endif;
                       </select>
                       <small class="form-text text-muted">This is the department of the new User.</small>
                     </div>
-                    <button type="submit" name="btnCreateUser" class="btn btn-block btn-primary">Submit</button>
+                    <button type="submit" name="btnCreateUser" class="btn btn-block btn-primary">Save</button>
                   </form>
                 </div>
                 <div class="modal-footer">
@@ -288,7 +288,7 @@ endif;
                       </select>
                       <small class="form-text text-muted">This is the status of the account.</small>
                     </div>
-                    <button type="submit" name="editUserBtn" class="btn btn-block btn-primary">Submit</button>
+                    <button type="submit" name="editUserBtn" class="btn btn-block btn-primary">Save</button>
                   </form>
                 </div>
                 <div class="modal-footer">
