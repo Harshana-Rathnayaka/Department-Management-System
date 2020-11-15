@@ -91,7 +91,7 @@ require_once '../api/getLists.php';
 $department_count = mysqli_num_rows($departments_admin);
 $user_count = mysqli_num_rows($users_admin);
 $order_count = mysqli_num_rows($orders_admin);
-$email_count = mysqli_num_fields($emails_admin);
+$email_count = mysqli_num_rows($emails_admin);
 
 ?>
       <div class="content-wrapper">
@@ -279,6 +279,7 @@ unset($_SESSION['missing']);
                         <th scope="col">Name</th>
                         <th>Email</th>
                         <th>Action</th>
+                        <th>Send Email</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -293,7 +294,12 @@ while ($row = mysqli_fetch_array($emails_admin)):
                         <td><?php echo $row['senior_manager_email']; ?></td>
                         <td>
                           <button class="btn btn-dark btn-sm btnEditEmail"><i class="mdi mdi-account-edit"></i></button>
-                          <!-- <button class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button> -->
+
+                        </td>
+                        <td>
+                        <form action="../api/generatePdf.php" method="POST">
+                          <button type="submit" name="btnGeneratePdf" class="btn btn-success btn-sm"><i class="mdi mdi-send"></i></button>
+                          </form>
                         </td>
                       </tr>
                       <?php

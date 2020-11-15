@@ -139,67 +139,6 @@ class DbOperations
         }
     }
 
-    // adding new vehicle
-    public function createVehicle($make, $model, $year, $engine_capacity, $transmission, $horsepower, $condition, $colour, $convertible, $seats, $price, $img_link)
-    {
-
-        $stmt = $this->con->prepare("INSERT INTO `vehicles`(`make`, `model`, `year`, `engine_capacity`, `transmission`, `horsepower`, `vehicle_condition`, `colour`, `convertible`, `seats`, `price`, `image_link`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        $stmt->bind_param("ssssssssssss", $make, $model, $year, $engine_capacity, $transmission, $horsepower, $condition, $colour, $convertible, $seats, $price, $img_link);
-
-        if ($stmt->execute()) {
-            // vehicle created
-            return 1;
-        } else {
-            // some error
-            return 2;
-        }
-    }
-
-    // add a new colour
-    public function addNewColour($colour)
-    {
-        $stmt = $this->con->prepare("INSERT INTO `colours` (`colour`) VALUES (?);");
-        $stmt->bind_param("s", $colour);
-
-        if ($stmt->execute()) {
-            // new colour created
-            return 1;
-        } else {
-            // some error
-            return 2;
-        }
-    }
-
-    // adding to wishlist
-    public function addToWishlist($user_id, $vehicle_id, $make_id, $quantity)
-    {
-        $stmt = $this->con->prepare("INSERT INTO `wishlist`(`user_id`, `vehicle_id`, `make_id`, `quantity`) VALUES (?, ?, ?, ?); ");
-        $stmt->bind_param("iiii", $user_id, $vehicle_id, $make_id, $quantity);
-
-        if ($stmt->execute()) {
-            // added to wishlist
-            return 1;
-        } else {
-            // some error
-            return 2;
-        }
-    }
-
-    // adding to cart
-    public function addToCart($user_id, $vehicle_id, $make_id, $quantity, $total)
-    {
-        $stmt = $this->con->prepare("INSERT INTO `cart`(`user_id`, `vehicle_id`, `make_id`, `quantity`, `total_price`) VALUES (?, ?, ?, ?, ?); ");
-        $stmt->bind_param("iiiii", $user_id, $vehicle_id, $make_id, $quantity, $total);
-
-        if ($stmt->execute()) {
-            // added to cart
-            return 1;
-        } else {
-            // some error
-            return 2;
-        }
-    }
-
     // adding to orders
     public function placeOrder($user_id, $department_id, $item, $quantity, $order_details)
     {
@@ -231,15 +170,6 @@ class DbOperations
     {
         $stmt = $this->con->prepare("SELECT * FROM `users` WHERE `id` = ?");
         $stmt->bind_param("i", $userid);
-        $stmt->execute();
-        return $stmt->get_result()->fetch_assoc();
-    }
-
-    // retreiving vehicle data
-    public function getVehicleByID($vehicle_id)
-    {
-        $stmt = $this->con->prepare("SELECT * FROM `vehicles` INNER JOIN `manufacturers` ON manufacturers.make_id = vehicles.make INNER JOIN `colours` ON colours.id = vehicles.colour INNER JOIN `transmissions` ON transmissions.id = vehicles.transmission WHERE `vehicle_id` = ?");
-        $stmt->bind_param("i", $vehicle_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
@@ -316,6 +246,16 @@ class DbOperations
     public function getEmails()
     {
         $stmt = $this->con->prepare("SELECT * FROM `senior_managers`");
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retreiving orders by created date
+    public function getOrdersByDate($today_date, $yesterday_date)
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
+		WHERE `placed_on` <= ? AND `placed_on` >= ? ORDER BY `order_id`");
+        $stmt->bind_param("ss", $today_date, $yesterday_date);
         $stmt->execute();
         return $stmt->get_result();
     }
