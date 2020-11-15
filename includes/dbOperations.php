@@ -50,9 +50,10 @@ class DbOperations
     }
 
     // updating OTP
-    public function updateUserOTP($user_id, $activation_code, $otp) {
-        $stmt = $this->con->prepare("UPDATE `users` SET `activation_code` = ?, `otp` = ? WHERE `id` = ?");
-        $stmt->bind_param("ssi", $activation_code, $otp, $user_id);
+    public function updateUserOTP($user_id, $otp)
+    {
+        $stmt = $this->con->prepare("UPDATE `users` SET `otp` = ? WHERE `id` = ?");
+        $stmt->bind_param("si", $otp, $user_id);
 
         if ($stmt->execute()) {
             // otp updated
@@ -61,6 +62,30 @@ class DbOperations
             // some error
             return 1;
         }
+    }
+
+    // updating login attempts
+    public function updateLoginAttempts($ip_address, $timestamp)
+    {
+        $stmt = $this->con->prepare("INSERT INTO `login_attempts` (`attempt_id`, `ip_address`, `timestamp`) VALUES (NULL, ?, ?);");
+        $stmt->bind_param("ss", $ip_address, $timestamp);
+
+        if ($stmt->execute()) {
+            // login attempt added
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+    }
+
+    // retrieving login attempts
+    public function getLoginAttempts($time, $user_ip)
+    {
+        $stmt = $this->con->prepare("SELECT COUNT(*) AS `total_count` FROM `login_attempts` WHERE `timestamp` > ? AND `ip_address` = ?;");
+        $stmt->bind_param("ss", $time, $user_ip);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
     }
 
     // adding new department
