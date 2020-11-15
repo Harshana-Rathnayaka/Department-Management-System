@@ -90,16 +90,15 @@ require_once '../api/getLists.php';
 $department_count = mysqli_num_rows($departments_admin);
 $user_count = mysqli_num_rows($users_admin);
 $order_count = mysqli_num_rows($orders_admin);
+$email_count = mysqli_num_fields($emails_admin);
 
 ?>
+      <div class="content-wrapper">
+        <div class="content">
 
-
-            <div class="content-wrapper">
-                <div class="content">
-
-                    <!-- Top Statistics -->
+          <!-- Top Statistics -->
           <div class="row">
-            <div class="col-md-6 col-lg-6 col-xl-3">
+          <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-primary border">
                 <div class="card-block">
                   <i class="mdi mdi-city mr-4 text-white"></i>
@@ -122,7 +121,7 @@ $order_count = mysqli_num_rows($orders_admin);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-success border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
+                  <i class="mdi mdi-basket mr-4 text-white"></i>
                   <h3 class="text-white my-2"><?php echo $order_count; ?></h3>
                   <p>Orders</p>
                 </div>
@@ -130,11 +129,11 @@ $order_count = mysqli_num_rows($orders_admin);
             </div>
 
             <div class="col-md-6 col-lg-6 col-xl-3">
-              <div class="card widget-block p-4 rounded bg-secondary border">
+              <div class="card widget-block p-4 rounded bg-danger border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
-                  <p>New Users</p>
+                  <i class="mdi mdi-verified mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $email_count; ?></h3>
+                  <p>Senior Managers</p>
                 </div>
               </div>
             </div>

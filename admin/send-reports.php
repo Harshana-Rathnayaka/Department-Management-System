@@ -122,7 +122,7 @@ $email_count = mysqli_num_fields($emails_admin);
             <div class="col-md-6 col-lg-6 col-xl-3">
               <div class="card widget-block p-4 rounded bg-success border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
+                  <i class="mdi mdi-basket mr-4 text-white"></i>
                   <h3 class="text-white my-2"><?php echo $order_count; ?></h3>
                   <p>Orders</p>
                 </div>
@@ -130,11 +130,11 @@ $email_count = mysqli_num_fields($emails_admin);
             </div>
 
             <div class="col-md-6 col-lg-6 col-xl-3">
-              <div class="card widget-block p-4 rounded bg-secondary border">
+              <div class="card widget-block p-4 rounded bg-danger border">
                 <div class="card-block">
-                  <i class="mdi mdi-account-outline mr-4 text-white"></i>
-                  <h3 class="text-white my-2">5300</h3>
-                  <p>New Users</p>
+                  <i class="mdi mdi-verified mr-4 text-white"></i>
+                  <h3 class="text-white my-2"><?php echo $email_count; ?></h3>
+                  <p>Senior Managers</p>
                 </div>
               </div>
             </div>
