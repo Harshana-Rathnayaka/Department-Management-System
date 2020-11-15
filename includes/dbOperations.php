@@ -49,6 +49,20 @@ class DbOperations
         return $stmt->num_rows > 0;
     }
 
+    // updating OTP
+    public function updateUserOTP($user_id, $activation_code, $otp) {
+        $stmt = $this->con->prepare("UPDATE `users` SET `activation_code` = ?, `otp` = ? WHERE `id` = ?");
+        $stmt->bind_param("ssi", $activation_code, $otp, $user_id);
+
+        if ($stmt->execute()) {
+            // otp updated
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+    }
+
     // adding new department
     public function createDepartment($name)
     {

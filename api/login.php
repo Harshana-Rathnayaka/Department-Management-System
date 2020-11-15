@@ -2,6 +2,7 @@
 
 session_start();
 require_once '../includes/dbOperations.php';
+use PHPMailer\PHPMailer\PHPMailer;
 
 $response = array();
 
@@ -13,6 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // db object
         $db = new DbOperations();
 
+        // random values
+        $activation_code = md5(rand());
+        $otp = rand(100000, 999999);
+
         if ($db->userLogin($_POST['username'], $_POST['password'])) {
 
             // getting user data
@@ -21,108 +26,99 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // checks if the user is active
             if ($user['status'] == 1) {
 
-                // admin account
-                if ($user['user_type'] == 0) {
+                // getting user data to use in email and db updating
+                $user_id = $user['id'];
+                $user_email = $user['email'];
 
-                    // session and reroute
-                    $_SESSION['UserName'] = $_POST['username'];
-                    $_SESSION['FullName'] = $user['fullname'];
-                    $_SESSION['Email'] = $user['email'];
+                // email and password used to send the emails
+                $sender_email = 'example@gmail.com'; // add your email here
+                $sender_password = '11111'; // add your email password here
+                $message_body = '
+                <p> Please use <strong>' . $otp . '</strong> as the OTP Verification code to login to your account.
+                This OTP is valid till you logout.
+                ';
+
+                // update otp in database
+                $updating_otp_result = $db->updateUserOTP($user_id, $activation_code, $otp);
+
+                // if otp updating was successful
+                if ($updating_otp_result == 0) {
+
+                    // sending the user to the verification page
                     $_SESSION['Id'] = $user['id'];
-                    $_SESSION['UserType'] = $user['user_type'];
-                    $_SESSION['UserDepartment'] = $user['department_id'];
 
-                    $response['error'] = false;
-                    $response['message'] = "Logged in successfully!";
-                    $response['user_type'] = $user['user_type'];
-                    $response['user_department'] = $user['department_id'];
+                    require_once "../PHPMailer/PHPMailer.php";
+                    require_once "../PHPMailer/SMTP.php";
+                    require_once "../PHPMailer/Exception.php";
 
-                    header("location:../admin/index.php");
+                    $mail = new PHPMailer(true);
 
-                    // team leader account
-                } elseif ($user['user_type'] == 1) {
+                    $mail->IsSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = $sender_email;
+                    $mail->Password = $sender_password;
+                    $mail->Port = 587;
 
-                    // session and reroute
-                    $_SESSION['UserName'] = $_POST['username'];
-                    $_SESSION['FullName'] = $user['fullname'];
-                    $_SESSION['Email'] = $user['email'];
-                    $_SESSION['Id'] = $user['id'];
-                    $_SESSION['UserType'] = $user['user_type'];
-                    $_SESSION['UserDepartment'] = $user['department_id'];
+                    // email settings
+                    $mail->IsHTML(true);
+                    $mail->SetFrom($sender_email, 'Administrator');
+                    $mail->AddAddress($user_email);
+                    $mail->Subject = ('[no-reply] OTP Verification Code');
+                    $mail->Body = $message_body;
 
-                    $response['error'] = false;
-                    $response['message'] = "Logged in successfully!";
-                    $response['user_type'] = $user['user_type'];
-                    $response['user_department'] = $user['department_id'];
+                    // email sent
+                    if ($mail->Send()) {
 
-                    header("location:../leader/index.php");
+                        $_SESSION['success'] = "Please enter the code sent to your email.";
+                        $response['error'] = false;
+                        $response['message'] = "Email sent!";
+                        header("location:../verification.php");
 
-                    // department manager account
-                } elseif ($user['user_type'] == 2) {
+                        // email not sent
+                    } else {
 
-                    // session and reroute
-                    $_SESSION['UserName'] = $_POST['username'];
-                    $_SESSION['FullName'] = $user['fullname'];
-                    $_SESSION['Email'] = $user['email'];
-                    $_SESSION['Id'] = $user['id'];
-                    $_SESSION['UserType'] = $user['user_type'];
-                    $_SESSION['UserDepartment'] = $user['department_id'];
+                        $_SESSION['error'] = "Something went wrong, Please try again later.";
+                        $response['error'] = true;
+                        $response['message'] = "Email was not sent!";
+                        header("location:../signin.php");
 
-                    $response['error'] = false;
-                    $response['message'] = "Logged in successfully!";
-                    $response['user_type'] = $user['user_type'];
-                    $response['user_department'] = $user['department_id'];
+                    }
 
-                    header("location:../manager/index.php");
+                } elseif ($updating_otp_result == 1) {
 
-                    // finance manager account
-                } elseif ($user['user_type'] == 3) {
-
-                    // session and reroute
-                    $_SESSION['UserName'] = $_POST['username'];
-                    $_SESSION['FullName'] = $user['fullname'];
-                    $_SESSION['Email'] = $user['email'];
-                    $_SESSION['Id'] = $user['id'];
-                    $_SESSION['UserType'] = $user['user_type'];
-                    $_SESSION['UserDepartment'] = $user['department_id'];
-
-                    $response['error'] = false;
-                    $response['message'] = "Logged in successfully!";
-                    $response['user_type'] = $user['user_type'];
-                    $response['user_department'] = $user['department_id'];
-
-                    header("location:../finance/index.php");
-
-                } else {
-                    $_SESSION['error'] = "Your account is not valid.";
+                    $_SESSION['error'] = "Something went wrong. Could not update OTP code.";
                     header("location:../signin.php");
-
                     $response['error'] = true;
-                    $response['message'] = "Your account is not of a valid type.";
+                    $response['message'] = "Something went wrong. Could not update OTP code.";
+
                 }
+
             } else {
+
                 $_SESSION['error'] = "Your account has been suspended. Please contact the administrator.";
                 header("location:../signin.php");
-
                 $response['error'] = true;
-                $response['message'] = "Your request hasn't been approved yet. Please try again later.";
+                $response['message'] = "Your account has been suspended. Please contact the administrator.";
+
             }
         } else {
+
             $_SESSION['error'] = "The username or password you entered is incorrect. Please check again.";
             header("location:../signin.php");
+            $response["error"] = true;
+            $response["message"] = "The username or password you entered is incorrect. Please check again.";
 
-            $response['error'] = true;
-            $response['message'] = "Invalid username or password";
         }
+
     } else {
+
+        $_SESSION['error'] = "Required fields are missing.";
         header("location:../signin.php");
         $response['error'] = true;
-        $response['message'] = "Required fields are missing";
+        $response["message"] = 'Required fields are missing.';
+
     }
-} else {
-    // wrong method
-    $response['error'] = true;
-    $response['message'] = "Invalid Request";
 }
 
 // json output

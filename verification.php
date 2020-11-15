@@ -80,18 +80,15 @@ if (isset($_SESSION['UserName'])) {
             </div>
             <div class="card-body p-5">
 
-              <h4 class="text-dark mb-5">Sign In</h4>
-              <form action="api/login.php" method="POST">
+              <h4 class="text-dark mb-5">OTP Verification</h4>
+              <form action="api/verify.php" method="POST">
                 <div class="row">
                   <div class="form-group col-md-12 mb-4">
-                    <input type="text" class="form-control input-lg" name="username" required id="username" aria-describedby="usernameHelp" placeholder="Username">
-                  </div>
-                  <div class="form-group col-md-12 ">
-                    <input type="password" class="form-control input-lg" name="password" required id="password" placeholder="Password">
+                    <input type="text" class="form-control input-lg" name="otp" required id="otp" aria-describedby="otpHelp" placeholder="OTP Code">
                   </div>
                   <div class="col-md-12">
 
-                    <button type="submit" class="btn btn-lg btn-primary btn-block mb-4">Sign In</button>
+                    <button type="submit" class="btn btn-lg btn-primary btn-block mb-4">Continue</button>
 
 
                     <?php
@@ -111,7 +108,7 @@ unset($_SESSION['error']);
                         <?php echo $_SESSION['missing']; ?>
                         </div>
                     <?php
-unset($_SESSION['success']);
+unset($_SESSION['missing']);
 } elseif (@$_SESSION['success'] == true) {
     ?>
                         <div role="alert" class=" alert-success alert text-center py-3">
