@@ -41,6 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // login
             if ($db->userLogin($_POST['username'], $_POST['password'])) {
 
+                // deleting the login attempts after login
+                $db->deleteLoginAttempts($ip_address);
+
                 // getting user data
                 $user = $db->getUserByUsername($_POST['username']);
 

@@ -88,6 +88,21 @@ class DbOperations
         return $stmt->get_result()->fetch_assoc();
     }
 
+    // deleting login attempts
+    public function deleteLoginAttempts($ip_address)
+    {
+        $stmt = $this->con->prepare("DELETE FROM `login_attempts` WHERE `ip_address` = ?");
+        $stmt->bind_param("s", $ip_address);
+
+        if ($stmt->execute()) {
+            // login attempt deleted
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+    }
+
     // adding new department
     public function createDepartment($name)
     {
