@@ -90,7 +90,7 @@ require_once '../api/getLists.php';
 $department_count = mysqli_num_rows($departments_admin);
 $user_count = mysqli_num_rows($users_admin);
 $order_count = mysqli_num_rows($orders_admin);
-$email_count = mysqli_num_fields($emails_admin);
+$email_count = mysqli_num_rows($emails_admin);
 
 ?>
       <div class="content-wrapper">
