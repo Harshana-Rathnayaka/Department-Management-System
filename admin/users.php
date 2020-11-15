@@ -6,13 +6,13 @@ if (!isset($_SESSION['UserName'])) {
 } elseif (isset($_SESSION['UserType'])) {
     $usertype = $_SESSION['UserType'];
 
-    // if ($usertype == 1) {
-    //   header('location:../leader/index.php');
-    // } else if ($usertype == 2) {
-    //   header('location:../manager/index.php');
-    // } else if ($usertype == 3) {
-    //   header('location:../finance/index.php');
-    // }
+    if ($usertype == 1) {
+        header('location:../leader/index.php');
+    } else if ($usertype == 2) {
+        header('location:../manager/index.php');
+    } else if ($usertype == 3) {
+        header('location:../finance/index.php');
+    }
 }
 ?>
 
@@ -75,122 +75,17 @@ if (!isset($_SESSION['UserName'])) {
           ——— LEFT SIDEBAR WITH FOOTER
           =====================================
         -->
-    <aside class="left-sidebar bg-sidebar">
-      <div id="sidebar" class="sidebar sidebar-with-footer">
-        <!-- Aplication Brand -->
-        <div class="app-brand">
-          <a href="/index.html">
-            <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="30"
-              height="33" viewBox="0 0 30 33">
-              <g fill="none" fill-rule="evenodd">
-                <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z" />
-                <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
-              </g>
-            </svg>
-            <span class="brand-name">Sleek Dashboard</span>
-          </a>
-        </div>
-        <!-- begin sidebar scrollbar -->
-        <div class="sidebar-scrollbar">
-
-          <!-- sidebar menu -->
-          <ul class="nav sidebar-inner" id="sidebar-menu">
-
-            <li>
-              <a class="sidenav-item-link" href="index.php">
-                <i class="mdi mdi-city"></i>
-                <span class="nav-text">Departments</span>
-              </a>
-            </li>
-
-            <li class="active">
-              <a class="sidenav-item-link" href="users.html">
-                <i class="mdi mdi-account-multiple"></i>
-                <span class="nav-text">Users</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="sidenav-item-link" href="settings.html">
-                <i class="mdi mdi-settings"></i>
-                <span class="nav-text">Settings</span>
-              </a>
-            </li>
-
-          </ul>
-
-        </div>
-
-        <hr class="separator" />
-
-        <ul class="nav sidebar-inner" id="sidebar-menu">
-          <li class="active">
-            <a class="sidenav-item-link" href="index.html">
-              <i class="mdi mdi-exit-to-app"></i>
-              <span class="nav-text">Logout</span>
-            </a>
-          </li>
-        </ul>
-
-      </div>
-    </aside>
+        <?php
+$currentPage = 'users';
+include 'sidebar.php';
+?>
 
 
     <div class="page-wrapper">
       <!-- Header -->
-      <header class="main-header " id="header">
-        <nav class="navbar navbar-static-top navbar-expand-lg">
-          <!-- Sidebar toggle button -->
-          <button id="sidebar-toggler" class="sidebar-toggle">
-            <span class="sr-only">Toggle navigation</span>
-          </button>
-          <!-- search form -->
-          <div class="search-form d-none d-lg-inline-block">
-            <div class="input-group">
-              <button type="button" name="search" id="search-btn" class="btn btn-flat">
-                <i class="mdi mdi-magnify"></i>
-              </button>
-              <input type="text" name="query" id="search-input" class="form-control"
-                placeholder="'departments', 'users', etc." autofocus autocomplete="on" />
-            </div>
-            <div id="search-results-container">
-              <ul id="search-results"></ul>
-            </div>
-          </div>
-
-          <div class="navbar-right ">
-            <ul class="nav navbar-nav">
-              <!-- User Account -->
-              <li class="dropdown user-menu">
-                <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <img src="assets/img/user/user.png" class="user-image" alt="User Image" />
-                  <span class="d-none d-lg-inline-block"><?php echo $_SESSION['FullName']; ?></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <!-- User image -->
-                  <li class="dropdown-header">
-                    <img src="assets/img/user/user.png" class="img-circle" alt="User Image" />
-                    <div class="d-inline-block">
-                    <?php echo $_SESSION['FullName']; ?> <small class="pt-1"><?php echo $_SESSION['Email']; ?></small>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="settings.php"> <i class="mdi mdi-settings"></i> Account Settings </a>
-                  </li>
-
-                  <li class="dropdown-footer">
-                    <a href="../logout.php?logout"> <i class="mdi mdi-logout"></i> Log Out </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-
-      </header>
-
       <?php
+
+include 'header.php';
 
 require_once '../api/getLists.php';
 $department_count = mysqli_num_rows($departments_admin);
@@ -344,8 +239,8 @@ include '../api/getLists.php';
 if ($departments_admin):
     while ($row = mysqli_fetch_array($departments_admin)):
     ?>
-											                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
-											                <?php
+												                    <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
+												                <?php
 endwhile;
 endif;
 ?>
@@ -494,20 +389,7 @@ endwhile;
         </div>
       </div>
 
-      <footer class="footer mt-auto">
-        <div class="copyright bg-white">
-          <p>
-            &copy; <span id="copy-year">2019</span> Made with &#128154; by
-            <a class="text-primary" href="https://github.com/Harshana-Rathnayaka" target="_blank">Dreeko
-              Corporations</a>.
-          </p>
-        </div>
-        <script>
-          var d = new Date();
-          var year = d.getFullYear();
-          document.getElementById("copy-year").innerHTML = year;
-        </script>
-      </footer>
+      <?php include 'footer.php';?>
 
     </div>
   </div>
