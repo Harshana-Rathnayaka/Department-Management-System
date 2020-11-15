@@ -27,9 +27,9 @@ if (!isset($_POST['editOrderBtn']) && !isset($_POST['approveOrderManager'])
 
         // getting the values
         $order_id = $_POST['orderId'];
-        $item = $_POST['editItem'];
-        $quantity = $_POST['editQuantity'];
-        $order_details = $_POST['editOrderDetails'];
+        $item = trim($_POST['editItem']);
+        $quantity = trim($_POST['editQuantity']);
+        $order_details = trim($_POST['editOrderDetails']);
         $cancel = $_POST['cancelOrderCheckbox'];
 
         $result = $db->updateOrderByUser($order_id, $item, $quantity, $order_details, $cancel);

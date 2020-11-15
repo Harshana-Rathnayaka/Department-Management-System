@@ -14,9 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $user_id = $_SESSION['Id'];
         $department_id = $_POST['department'];
-        $item = $_POST['item'];
-        $quantity = $_POST['quantity'];
-        $order_details = $_POST['orderDetails'];
+        $item = trim($_POST['item']);
+        $quantity = trim($_POST['quantity']);
+        $order_details = trim($_POST['orderDetails']);
 
         $result = $db->placeOrder(
             $user_id,
