@@ -36,7 +36,7 @@
                   </li>
 
                   <li class="dropdown-footer">
-                    <a href="logout.php?logout"> <i class="mdi mdi-logout"></i> Log Out </a>
+                    <a href="../logout.php?logout"> <i class="mdi mdi-logout"></i> Log Out </a>
                   </li>
                 </ul>
               </li>
