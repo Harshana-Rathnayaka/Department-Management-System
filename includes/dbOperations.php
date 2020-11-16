@@ -254,7 +254,7 @@ class DbOperations
     public function getOrdersByDate($today_date, $yesterday_date)
     {
         $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id
-		WHERE `placed_on` <= ? AND `placed_on` >= ? ORDER BY `order_id`");
+        INNER JOIN `users` ON users.id = orders.user_id WHERE `placed_on` <= ? AND `placed_on` >= ? ORDER BY `order_id`");
         $stmt->bind_param("ss", $today_date, $yesterday_date);
         $stmt->execute();
         return $stmt->get_result();

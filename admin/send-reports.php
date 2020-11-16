@@ -279,7 +279,7 @@ unset($_SESSION['missing']);
                         <th scope="col">Name</th>
                         <th>Email</th>
                         <th>Action</th>
-                        <th>Send Email</th>
+                        <th>Send Daily Report</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -298,7 +298,8 @@ while ($row = mysqli_fetch_array($emails_admin)):
                         </td>
                         <td>
                         <form action="../api/generatePdf.php" method="POST">
-                          <button type="submit" name="btnGeneratePdf" class="btn btn-success btn-sm"><i class="mdi mdi-send"></i></button>
+                        <input name="managerEmail" type="hidden" value="<?php echo $row['senior_manager_email']; ?>">
+                          <button type="submit" name="btnSendReport" class="btn btn-success btn-sm"><i class="mdi mdi-send"></i></button>
                           </form>
                         </td>
                       </tr>
