@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $db = new DbOperations();
 
         // getting user data
-        $user = $db->getUserById($user_id);
+        $user = $db->getAccountDetails($user_id);
         $user_otp = $user['otp'];
 
         // if the otp entered is correct
