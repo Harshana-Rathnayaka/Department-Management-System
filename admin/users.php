@@ -47,14 +47,6 @@ if (!isset($_SESSION['UserName'])) {
   <!-- FAVICON -->
   <link href="assets/img/favicon.png" rel="shortcut icon" />
 
-  <!--
-    HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
-  -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
   <script src="assets/plugins/nprogress/nprogress.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
@@ -85,7 +77,7 @@ include 'sidebar.php';
       <!-- Header -->
       <?php
 
-include 'header.php';
+include '../header.php';
 
 require_once '../api/getLists.php';
 $department_count = mysqli_num_rows($departments_admin);
@@ -390,7 +382,7 @@ endwhile;
         </div>
       </div>
 
-      <?php include 'footer.php';?>
+      <?php include '../footer.php';?>
 
     </div>
   </div>

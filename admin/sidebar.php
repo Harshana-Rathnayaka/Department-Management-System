@@ -55,7 +55,7 @@
 
         <ul class="nav sidebar-inner" id="sidebar-menu">
           <li>
-            <a class="sidenav-item-link" href="index.html">
+            <a class="sidenav-item-link" href="../logout.php?logout">
               <i class="mdi mdi-exit-to-app"></i>
               <span class="nav-text">Logout</span>
             </a>

@@ -78,7 +78,8 @@ include 'sidebar.php';
             <!-- Header -->
             <?php
 
-include 'header.php';
+include '../header.php';
+
 require_once '../api/getLists.php';
 $department_count = mysqli_num_rows($departments_admin);
 $user_count = mysqli_num_rows($users_admin);
@@ -215,7 +216,7 @@ unset($_SESSION['missing']);
                     </div>
                 </div>
 
-                <?php include 'footer.php';?>
+                <?php include '../footer.php';?>
 
             </div>
         </div>
