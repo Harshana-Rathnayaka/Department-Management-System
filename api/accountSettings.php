@@ -23,6 +23,8 @@ if (!isset($_POST['editAccountInfoBtn'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
 
+    $user_type = $_SESSION['UserType'];
+
     // db object
     $db = new DbOperations();
 
@@ -34,7 +36,17 @@ if (!isset($_POST['editAccountInfoBtn'])) {
         $_SESSION['error'] = "Something went wrong, please try again.";
         $response['error'] = true;
         $response['message'] = "Something went wrong, please try again.";
-        header("location:../admin/settings.php");
+
+        // sending to page according to account type
+        if ($user_type == 0) {
+            header("location:../admin/settings.php");
+        } elseif ($user_type == 1) {
+            header("location:../leader/settings.php");
+        } elseif ($user_type == 2) {
+            header("location:../manager/settings.php");
+        } else {
+            header("location:../finance/settings.php");
+        }
 
     } elseif ($result == 0) {
 
@@ -42,7 +54,17 @@ if (!isset($_POST['editAccountInfoBtn'])) {
         $_SESSION['success'] = "Profile updated successfully!";
         $response['error'] = false;
         $response['message'] = "Profile updated successfully";
-        header("location:../admin/settings.php");
+
+        // sending to page according to account type
+        if ($user_type == 0) {
+            header("location:../admin/settings.php");
+        } elseif ($user_type == 1) {
+            header("location:../leader/settings.php");
+        } elseif ($user_type == 2) {
+            header("location:../manager/settings.php");
+        } else {
+            header("location:../finance/settings.php");
+        }
 
     }
 } else {
