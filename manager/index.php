@@ -47,14 +47,6 @@ if (!isset($_SESSION['UserName'])) {
   <!-- FAVICON -->
   <link href="assets/img/favicon.png" rel="shortcut icon" />
 
-  <!--
-    HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
-  -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
   <script src="assets/plugins/nprogress/nprogress.js"></script>
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
@@ -76,115 +68,17 @@ if (!isset($_SESSION['UserName'])) {
           ——— LEFT SIDEBAR WITH FOOTER
           =====================================
         -->
-    <aside class="left-sidebar bg-sidebar">
-      <div id="sidebar" class="sidebar sidebar-with-footer">
-        <!-- Aplication Brand -->
-        <div class="app-brand">
-          <a href="/index.html">
-            <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" width="30"
-              height="33" viewBox="0 0 30 33">
-              <g fill="none" fill-rule="evenodd">
-                <path class="logo-fill-blue" fill="#7DBCFF" d="M0 4v25l8 4V0zM22 4v25l8 4V0z" />
-                <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
-              </g>
-            </svg>
-            <span class="brand-name">Sleek Dashboard</span>
-          </a>
-        </div>
-        <!-- begin sidebar scrollbar -->
-        <div class="sidebar-scrollbar">
-
-          <!-- sidebar menu -->
-          <ul class="nav sidebar-inner" id="sidebar-menu">
-
-            <li class="active">
-              <a class="sidenav-item-link" href="index.php">
-                <i class="mdi mdi-shopping"></i>
-                <span class="nav-text">Orders</span>
-              </a>
-            </li>
-
-            <li>
-              <a class="sidenav-item-link" href="settings.php">
-                <i class="mdi mdi-settings"></i>
-                <span class="nav-text">Settings</span>
-              </a>
-            </li>
-
-          </ul>
-
-        </div>
-
-        <hr class="separator" />
-
-        <ul class="nav sidebar-inner" id="sidebar-menu">
-          <li>
-            <a class="sidenav-item-link" href="../logout.php?logout">
-              <i class="mdi mdi-exit-to-app"></i>
-              <span class="nav-text">Logout</span>
-            </a>
-          </li>
-        </ul>
-
-      </div>
-    </aside>
+        <?php
+$currentPage = 'orders';
+include 'sidebar.php';
+?>
 
 
     <div class="page-wrapper">
       <!-- Header -->
-      <header class="main-header " id="header">
-        <nav class="navbar navbar-static-top navbar-expand-lg">
-          <!-- Sidebar toggle button -->
-          <button id="sidebar-toggler" class="sidebar-toggle">
-            <span class="sr-only">Toggle navigation</span>
-          </button>
-          <!-- search form -->
-          <div class="search-form d-none d-lg-inline-block">
-            <div class="input-group">
-              <button type="button" name="search" id="search-btn" class="btn btn-flat">
-                <i class="mdi mdi-magnify"></i>
-              </button>
-              <input type="text" name="query" id="search-input" class="form-control"
-                placeholder="'departments', 'users', etc." autofocus autocomplete="on" />
-            </div>
-            <div id="search-results-container">
-              <ul id="search-results"></ul>
-            </div>
-          </div>
-
-          <div class="navbar-right ">
-            <ul class="nav navbar-nav">
-              <!-- User Account -->
-              <li class="dropdown user-menu">
-                <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                  <img src="assets/img/user/user.png" class="user-image" alt="User Image" />
-                  <span class="d-none d-lg-inline-block"><?php echo $_SESSION['FullName']; ?></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <!-- User image -->
-                  <li class="dropdown-header">
-                    <img src="assets/img/user/user.png" class="img-circle" alt="User Image" />
-                    <div class="d-inline-block">
-                    <?php echo $_SESSION['FullName']; ?> <small class="pt-1"><?php echo $_SESSION['Email']; ?></small>
-                    </div>
-                  </li>
-                  <li>
-                    <a href="settings.php"> <i class="mdi mdi-settings"></i> Account Settings </a>
-                  </li>
-
-                  <li class="dropdown-footer">
-                    <a href="../logout.php?logout"> <i class="mdi mdi-logout"></i> Log Out </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-
-      </header>
-
       <?php
+
+include '../header.php';
 
 require_once '../api/getLists.php';
 $all_orders_count = mysqli_num_rows($all_orders_department);
@@ -365,20 +259,7 @@ endwhile;
         </div>
       </div>
 
-      <footer class="footer mt-auto">
-        <div class="copyright bg-white">
-          <p>
-            &copy; <span id="copy-year">2019</span> Made with &#128154; by
-            <a class="text-primary" href="https://github.com/Harshana-Rathnayaka" target="_blank">Dreeko
-              Corporations</a>.
-          </p>
-        </div>
-        <script>
-          var d = new Date();
-          var year = d.getFullYear();
-          document.getElementById("copy-year").innerHTML = year;
-        </script>
-      </footer>
+      <?php include '../footer.php';?>
 
     </div>
   </div>
