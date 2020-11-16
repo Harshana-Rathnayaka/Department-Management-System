@@ -166,10 +166,10 @@ class DbOperations
     }
 
     // retreiving user data by id
-    public function getUserById($userid)
+    public function getAccountDetails($user_id)
     {
         $stmt = $this->con->prepare("SELECT * FROM `users` WHERE `id` = ?");
-        $stmt->bind_param("i", $userid);
+        $stmt->bind_param("i", $user_id);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
@@ -427,36 +427,6 @@ class DbOperations
         }
     }
 
-    // update admin details
-    public function updateAdminAccountDetails($userid, $firstname, $lastname, $username, $email)
-    {
-        $stmt = $this->con->prepare("UPDATE `users` SET `first_name` = ?, `last_name` = ?, `username` = ?, `email` = ? WHERE `id` = ?");
-        $stmt->bind_param("ssssi", $firstname, $lastname, $username, $email, $userid);
-
-        if ($stmt->execute()) {
-            // admin account details updated
-            return 0;
-        } else {
-            // some error
-            return 1;
-        }
-    }
-
-    // update user details
-    public function updateUserAccountDetails($userid, $firstname, $lastname, $birthday, $gender, $username, $email, $contact)
-    {
-        $stmt = $this->con->prepare("UPDATE `users` SET `first_name` = ?, `last_name` = ?, `birthday` = ?, `gender` = ?, `username` = ?, `email` = ?, `contact` = ? WHERE `id` = ?");
-        $stmt->bind_param("sssssssi", $firstname, $lastname, $birthday, $gender, $username, $email, $contact, $userid);
-
-        if ($stmt->execute()) {
-            // user account details updated
-            return 0;
-        } else {
-            // some error
-            return 1;
-        }
-    }
-
     // update an order by user
     public function updateOrderByUser($order_id, $item, $quantity, $order_details, $cancel)
     {
@@ -510,6 +480,21 @@ class DbOperations
         }
     }
 
+    // update user profile details
+    public function updateProfile($userid, $fullname, $username, $email)
+    {
+        $stmt = $this->con->prepare("UPDATE `users` SET `fullname` = ?, `username` = ?, `email` = ? WHERE `id` = ?");
+        $stmt->bind_param("sssi", $fullname, $username, $email, $userid);
+
+        if ($stmt->execute()) {
+            // account details updated
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+    }
+
     // update departments
     public function updateDepartments($department_id, $department_name)
     {
@@ -540,50 +525,4 @@ class DbOperations
         }
     }
 
-    /* CRUD  -> D -> DELETE */
-
-    // delete wishlist item
-    public function deleteWishlist($wishlist_id)
-    {
-        $stmt = $this->con->prepare("DELETE FROM `wishlist` WHERE `wishlist_id` = ?");
-        $stmt->bind_param("i", $wishlist_id);
-
-        if ($stmt->execute()) {
-            // item deleted
-            return 1;
-        } else {
-            // some error
-            return 2;
-        }
-    }
-
-    // delete cart item
-    public function deleteCartItem($cart_id)
-    {
-        $stmt = $this->con->prepare("DELETE FROM `cart` WHERE `cart_id` = ?");
-        $stmt->bind_param("i", $cart_id);
-
-        if ($stmt->execute()) {
-            // item deleted
-            return 1;
-        } else {
-            // some error
-            return 2;
-        }
-    }
-
-    // delete vehicle
-    public function deleteVehicle($vehicle_id)
-    {
-        $stmt = $this->con->prepare("DELETE FROM `vehicles` WHERE `vehicle_id` = ?");
-        $stmt->bind_param("i", $vehicle_id);
-
-        if ($stmt->execute()) {
-            // vehicle deleted
-            return 1;
-        } else {
-            // some error
-            return 2;
-        }
-    }
 }

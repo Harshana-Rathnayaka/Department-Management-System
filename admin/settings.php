@@ -48,15 +48,8 @@ if (!isset($_SESSION['UserName'])) {
     <!-- FAVICON -->
     <link href="assets/img/favicon.png" rel="shortcut icon" />
 
-    <!--
-    HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
-  -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
     <script src="assets/plugins/nprogress/nprogress.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 
@@ -139,38 +132,50 @@ $email_count = mysqli_num_rows($emails_admin);
             </div>
           </div>
 
-                    <!-- Form Modal -->
-                    <div class="modal fade" id="newDepartmentForm" tabindex="-1" role="dialog"
-                        aria-labelledby="newDepartmentFormTitle" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="newDepartmentFormTitle">Add New Department</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Department name</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1"
-                                                aria-describedby="emailHelp" placeholder="Enter the name">
-                                            <small id="emailHelp" class="form-text text-muted">This is the name of the
-                                                Department.</small>
-                                        </div>
 
+          <?php
+if (@$_SESSION['success'] == true) {
+    $success = $_SESSION['success'];
+    ?>
+          <script>
+            swal({
+              title: "SUCCESS!",
+              text: "<?php echo $success; ?>",
+              icon: "success",
+              button: "OK",
+            });
+          </script>
+        <?php
+unset($_SESSION['success']);
+} elseif (@$_SESSION['error'] == true) {
+    $error = $_SESSION['error'];
+    ?>
+        <script>
+          swal({
+            title: "ERROR!",
+            text: "<?php echo $error; ?>",
+            icon: "warning",
+            button: "OK",
+          });
+        </script>
+        <?php
+unset($_SESSION['error']);
+} elseif (@$_SESSION['missing'] == true) {
+    $missing = $_SESSION['missing'];
+    ?>
+          <script>
+            swal({
+              title: "INFO!",
+              text: "<?php echo $missing; ?>",
+              icon: "info",
+              button: "OK",
+            });
+          </script>
+        <?php
+unset($_SESSION['missing']);
+}
+?>
 
-                                        <button type="submit" class="btn btn-block btn-primary">Submit</button>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <!-- <button type="button" class="btn btn-danger btn-pill" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary btn-pill">Save Changes</button> -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="col-lg-12">
                         <div class="card card-default">
@@ -178,34 +183,30 @@ $email_count = mysqli_num_rows($emails_admin);
                                 <h2>Account Settings</h2>
                             </div>
                             <div class="card-body">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="emailInput">Email address</label>
-                                        <input type="email" class="form-control" id="emailInput"
-                                            placeholder="Enter your email">
-                                        <!-- <span class="mt-2 d-block">This is your email address.</span> -->
+                                <form action="../api/accountSettings.php" method="POST">
+                                <div class="form-group">
+
+                                        <input value="<?php echo $_SESSION['Id']; ?>" type="hidden" name="userId">
+
+                                        <label for="nameInput">Full Name</label>
+                                        <input value="<?php echo $account_details_all['fullname']; ?>" required type="text" name="fullname" class="form-control" id="nameInput"
+                                            placeholder="Enter your full name">
+                                        <span class="mt-2 d-block">This is your name.</span>
                                     </div>
                                     <div class="form-group">
                                         <label for="usernameInput">Username</label>
-                                        <input type="text" class="form-control" id="usernameInput"
+                                        <input value="<?php echo $account_details_all['username']; ?>" required type="text" name="username" class="form-control" id="usernameInput"
                                             placeholder="Enter your username">
-                                        <!-- <span class="mt-2 d-block">This is your email address.</span> -->
+                                        <span class="mt-2 d-block">This is your username.</span>
                                     </div>
                                     <div class="form-group">
-                                        <label for="passowrdInput">Password</label>
-                                        <input type="password" class="form-control" id="passowrdInput"
-                                            placeholder="Enter your password">
-                                    </div>
-                                   
-                                    
-                                   
-                                    <div class="form-group">
-                                        <label for="pictureInput">Profile Picture</label>
-                                        <input type="file" class="form-control-file" id="pictureInput">
+                                        <label for="emailInput">Email address</label>
+                                        <input value="<?php echo $account_details_all['email']; ?>" required type="email" name="email" class="form-control" id="emailInput"
+                                            placeholder="Enter your email">
+                                        <span class="mt-2 d-block">This is your email address.</span>
                                     </div>
                                     <div class="form-footer pt-4 pt-5 mt-4 border-top">
-                                        <button type="submit" class="btn btn-primary btn-default">Submit</button>
-                                        <button type="submit" class="btn btn-secondary btn-default">Cancel</button>
+                                        <button type="submit" name="editAccountInfoBtn" class="btn btn-primary btn-default">Submit</button>
                                     </div>
                                 </form>
                             </div>
@@ -214,32 +215,17 @@ $email_count = mysqli_num_rows($emails_admin);
                     </div>
                 </div>
 
-                <footer class="footer mt-auto">
-                    <div class="copyright bg-white">
-                        <p>
-                            &copy; <span id="copy-year">2019</span> Made with &#128154; by
-                            <a class="text-primary" href="https://github.com/Harshana-Rathnayaka" target="_blank">Dreeko
-                                Corporations</a>.
-                        </p>
-                    </div>
-                    <script>
-                        var d = new Date();
-                        var year = d.getFullYear();
-                        document.getElementById("copy-year").innerHTML = year;
-                    </script>
-                </footer>
+                <?php include 'footer.php';?>
 
             </div>
         </div>
 
 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCn8TFXGg17HAUcNpkwtxxyT9Io9B_NcM"
-            defer></script>
+        
         <script src="assets/plugins/jquery/jquery.min.js"></script>
         <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="assets/plugins/toaster/toastr.min.js"></script>
         <script src="assets/plugins/slimscrollbar/jquery.slimscroll.min.js"></script>
-        <script src="assets/plugins/charts/Chart.min.js"></script>
         <script src="assets/plugins/ladda/spin.min.js"></script>
         <script src="assets/plugins/ladda/ladda.min.js"></script>
         <script src="assets/plugins/jquery-mask-input/jquery.mask.min.js"></script>

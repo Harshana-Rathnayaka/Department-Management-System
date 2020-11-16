@@ -35,6 +35,9 @@ if (isset($_SESSION['Id']) && isset($_SESSION['UserDepartment'])) {
     $completed_orders_finance = $db->getCompletedOrdersForFinance();
     $all_orders_finance = $db->getAllOrdersForFinance();
 
+    // get account details for all
+    $account_details_all = $db->getAccountDetails($user_id);
+
 } else {
     $_SESSION['error'] = "Session timed out. Please login to continue.";
     $response['error'] = true;
