@@ -6,18 +6,16 @@ require_once '../includes/dbOperations.php';
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (
-        isset($_POST['name']) and
-        isset($_POST['email'])
-    ) {
+
+    if (isset($_POST['name']) && isset($_POST['email'])) {
+
+        $name = trim($_POST['name']);
+        $email = trim($_POST['email']);
 
         // we can operate the data further
         $db = new DbOperations();
 
-        $result = $db->createEmail(
-            $_POST['name'],
-            $_POST['email']
-        );
+        $result = $db->createEmail($name, $email);
 
         if ($result == 0) {
 

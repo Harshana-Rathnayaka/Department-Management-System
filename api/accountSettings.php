@@ -19,9 +19,9 @@ if (!isset($_POST['editAccountInfoBtn'])) {
 
     // getting the values
     $user_id = $_POST['userId'];
-    $fullname = $_POST['fullname'];
-    $username = $_POST['username'];
-    $email = $_POST['email'];
+    $fullname = trim($_POST['fullname']);
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
 
     $user_type = $_SESSION['UserType'];
 

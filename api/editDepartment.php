@@ -17,7 +17,7 @@ if (!isset($_POST['editDepartmentBtn'])) {
 
     // getting the values
     $department_id = $_POST['departmentId'];
-    $department_name = $_POST['editDepartmentName'];
+    $department_name = trim($_POST['editDepartmentName']);
 
     // db object
     $db = new DbOperations();

@@ -6,25 +6,31 @@ require_once '../includes/dbOperations.php';
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (
-        isset($_POST['fullname']) and
-        isset($_POST['username']) and
-        isset($_POST['email']) and
-        isset($_POST['password']) and
-        isset($_POST['usertype']) and
-        isset($_POST['department'])
-    ) {
+
+    if (isset($_POST['fullname']) &&
+        isset($_POST['username']) &&
+        isset($_POST['email']) &&
+        isset($_POST['password']) &&
+        isset($_POST['usertype']) &&
+        isset($_POST['department'])) {
+
+        $fullname = trim($_POST['fullname']);
+        $username = trim($_POST['username']);
+        $email = trim($_POST['email']);
+        $password = trim($_POST['password']);
+        $usertype = $_POST['usertype'];
+        $department = $_POST['department'];
 
         // we can operate the data further
         $db = new DbOperations();
 
         $result = $db->createUser(
-            $_POST['fullname'],
-            $_POST['username'],
-            $_POST['email'],
-            $_POST['password'],
-            $_POST['usertype'],
-            $_POST['department']
+            $fullname,
+            $username,
+            $email,
+            $password,
+            $usertype,
+            $department
         );
 
         if ($result == 1) {
@@ -36,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $response['error'] = false;
             $response['message'] = "User created successfully!";
             $_SESSION['success'] = "User created successfully!";
-
             header("location:../admin/users.php");
+
         } elseif ($result == 2) {
 
             // some error
@@ -53,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $response['error'] = true;
             $response['message'] = "It seems that this user already exists, please choose a different email and username";
             header("location:../admin/users.php");
+
         }
     } else {
 
@@ -64,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 } else {
-    
+
     // wrong method
     $response['error'] = true;
     $response['message'] = "Invalid Request";
