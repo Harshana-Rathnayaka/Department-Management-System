@@ -19,10 +19,17 @@
           <!-- sidebar menu -->
           <ul class="nav sidebar-inner" id="sidebar-menu">
 
-            <li class="<?php if($currentPage =='orders'){echo 'active';}?>">
+            <li class="<?php if($currentPage =='pending-orders'){echo 'active';}?>">
               <a class="sidenav-item-link" href="index.php">
                 <i class="mdi mdi-shopping"></i>
-                <span class="nav-text">Orders</span>
+                <span class="nav-text">Pending Orders</span>
+              </a>
+            </li>
+
+            <li class="<?php if($currentPage =='all-orders'){echo 'active';}?>">
+              <a class="sidenav-item-link" href="all-orders.php">
+                <i class="mdi mdi-basket"></i>
+                <span class="nav-text">All Orders</span>
               </a>
             </li>
 
