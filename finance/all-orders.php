@@ -70,7 +70,7 @@ if (!isset($_SESSION['UserName'])) {
           =====================================
         -->
         <?php
-$currentPage = 'pending-orders';
+$currentPage = 'all-orders';
 include 'sidebar.php';
 ?>
 
@@ -192,20 +192,21 @@ unset($_SESSION['missing']);
                     <thead>
                       <tr>
                         <th scope="col">#</th>
+                        <th scope="col">Department</th>
                         <th scope="col">Item</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Details</th>
                         <th scope="col">Status</th>
-                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
 
 <?php
-while ($row = mysqli_fetch_array($pending_orders_finance)):
+while ($row = mysqli_fetch_array($all_orders_finance)):
 ?>
                       <tr>
                         <td> <?php echo $row['order_id']; ?> </td>
+                        <td> <?php echo $row['department_name']; ?> </td>
                         <td> <?php echo $row['item']; ?> </td>
                         <td> <?php echo $row['quantity']; ?> </td>
                         <td> <?php echo $row['order_details']; ?> </td>
@@ -238,13 +239,6 @@ elseif ($order_status == 3):
                         <?php
 endif;
 ?>
-                       <td>
-                          <form action="../api/editOrder.php" method="POST">
-                            <input name="orderId" type="hidden" value="<?php echo $row['order_id']; ?>">
-                            <button type="submit" name="approveOrderFinance" class="btn btn-outline-success btn-sm"><i class="mdi mdi-check"></i></button>
-                            <button type="submit" name="rejectOrderFinance" class="btn btn-outline-danger btn-sm"><i class="mdi mdi-trash-can-outline"></i></button>
-                          </form>
-                        </td>
                       </tr>
 
                       <?php

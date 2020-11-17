@@ -356,10 +356,10 @@ class DbOperations
         return $stmt->get_result();
     }
 
-    // retrieveing all time orders for finance department
+    // retrieveing all time orders without pending orders for finance department
     public function getAllOrdersForFinance()
     {
-        $stmt = $this->con->prepare("SELECT * FROM `orders`");
+        $stmt = $this->con->prepare("SELECT * FROM `orders` INNER JOIN `departments` ON departments.department_id = orders.department_id  WHERE `order_status` != 0");
         $stmt->execute();
         return $stmt->get_result();
     }
