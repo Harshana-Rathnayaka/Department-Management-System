@@ -222,7 +222,7 @@ unset($_SESSION['missing']);
         </div>
 
 
-        
+
         <script src="assets/plugins/jquery/jquery.min.js"></script>
         <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="assets/plugins/toaster/toastr.min.js"></script>
@@ -241,9 +241,7 @@ unset($_SESSION['missing']);
         <script src="assets/js/date-range.js"></script>
         <script src="assets/js/map.js"></script>
         <script src="assets/js/custom.js"></script>
-
-
-
+        <script src="../timeout.js"></script>
 
 </body>
 
