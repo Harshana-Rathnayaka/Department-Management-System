@@ -2,6 +2,7 @@
 
 session_start();
 require_once '../includes/dbOperations.php';
+require_once '../includes/ipAddress.php';
 
 $response = array();
 
@@ -16,9 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // db object
         $db = new DbOperations();
 
+        // getting the ip address
+        $ip = new IpAddress();
+        $ip_address = $ip->getIPAddress();
+
         // getting user data
         $user = $db->getAccountDetails($user_id);
         $user_otp = $user['otp'];
+        $user_id = $user['id'];
 
         // if the otp entered is correct
         if ($user_otp == $entered_otp) {
@@ -57,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $response['user_type'] = $user['user_type'];
                 $response['user_department'] = $user['department_id'];
 
+                $db->addToLoginLog($user_id, $ip_address);
+
                 header("location:../leader/index.php");
 
                 // department manager account
@@ -75,6 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $response['user_type'] = $user['user_type'];
                 $response['user_department'] = $user['department_id'];
 
+                $db->addToLoginLog($user_id, $ip_address);
+
                 header("location:../manager/index.php");
 
                 // finance manager account
@@ -92,6 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $response['message'] = "Logged in successfully!";
                 $response['user_type'] = $user['user_type'];
                 $response['user_department'] = $user['department_id'];
+
+                $db->addToLoginLog($user_id, $ip_address);
 
                 header("location:../finance/index.php");
 

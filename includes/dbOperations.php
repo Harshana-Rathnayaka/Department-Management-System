@@ -154,6 +154,21 @@ class DbOperations
         }
     }
 
+    // adding to user login log
+    public function addToLoginLog($user_id, $ip_address)
+    {
+        $stmt = $this->con->prepare("INSERT INTO `login_log` (`user_id`, `login_ip`) VALUES (?, ?);");
+        $stmt->bind_param("is", $user_id, $ip_address);
+
+        if ($stmt->execute()) {
+            // added to login log table
+            return 1;
+        } else {
+            // some error
+            return 2;
+        }
+    }
+
     /* CRUD  -> r -> RETRIEVE */
 
     // retreiving user data by username
@@ -246,6 +261,14 @@ class DbOperations
     public function getEmails()
     {
         $stmt = $this->con->prepare("SELECT * FROM `senior_managers`");
+        $stmt->execute();
+        return $stmt->get_result();
+    }
+
+    // retrieving login log table
+    public function getLoginLog()
+    {
+        $stmt = $this->con->prepare("SELECT * FROM `login_log` INNER JOIN users ON users.id = login_log.user_id");
         $stmt->execute();
         return $stmt->get_result();
     }

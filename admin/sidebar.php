@@ -40,6 +40,13 @@
               </a>
             </li>
 
+            <li class="<?php if($currentPage =='user-activity'){echo 'active';}?>">
+              <a class="sidenav-item-link" href="user-activity.php">
+                <i class="mdi mdi-google-analytics"></i>
+                <span class="nav-text">Activity Log</span>
+              </a>
+            </li>
+
             <li class="<?php if($currentPage =='settings'){echo 'active';}?>">
               <a class="sidenav-item-link" href="settings.php">
                 <i class="mdi mdi-settings"></i>
