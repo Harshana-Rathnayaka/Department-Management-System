@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($total_login_count == 3) {
 
             $_SESSION['error'] = "Too many failed login attempts, please try again after 30 seconds.";
-            header("location:../signin.php");
+            header("location:../index.php");
             $response['error'] = true;
             $response['message'] = "Too many failed login attempts, please try again after 30 seconds.";
 
@@ -105,14 +105,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $_SESSION['error'] = "Something went wrong, Please try again later.";
                             $response['error'] = true;
                             $response['message'] = "Email was not sent!";
-                            header("location:../signin.php");
+                            header("location:../index.php");
 
                         }
 
                     } elseif ($updating_otp_result == 1) {
 
                         $_SESSION['error'] = "Something went wrong. Could not update OTP code.";
-                        header("location:../signin.php");
+                        header("location:../index.php");
                         $response['error'] = true;
                         $response['message'] = "Something went wrong. Could not update OTP code.";
 
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 } else {
 
                     $_SESSION['error'] = "Your account has been suspended. Please contact the administrator.";
-                    header("location:../signin.php");
+                    header("location:../index.php");
                     $response['error'] = true;
                     $response['message'] = "Your account has been suspended. Please contact the administrator.";
 
@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($remaining_attempts == 0) {
 
                     $_SESSION['error'] = "Too many failed login attempts, please try again after 30 seconds.";
-                    header("location:../signin.php");
+                    header("location:../index.php");
                     $response['error'] = true;
                     $response['message'] = "Too many failed login attempts, please try again after 30 seconds.";
 
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     $_SESSION['error'] = "The username or password you entered is incorrect. Please check again. You have " . $remaining_attempts .
                         " attempts remaining.";
-                    header("location:../signin.php");
+                    header("location:../index.php");
                     $response["error"] = true;
                     $response["message"] = "The username or password you entered is incorrect. Please check again. You have " . $remaining_attempts .
                         " attempts remaining.";
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
 
         $_SESSION['error'] = "Required fields are missing.";
-        header("location:../signin.php");
+        header("location:../index.php");
         $response['error'] = true;
         $response["message"] = 'Required fields are missing.';
 

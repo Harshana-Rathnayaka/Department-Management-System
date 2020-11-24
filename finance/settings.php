@@ -2,7 +2,7 @@
 session_start();
 if (!isset($_SESSION['UserName'])) {
     $_SESSION['error'] = "Session timed out. Please login to continue.";
-    header('location:../signin.php');
+    header('location:../index.php');
 } elseif (isset($_SESSION['UserType'])) {
     $usertype = $_SESSION['UserType'];
 

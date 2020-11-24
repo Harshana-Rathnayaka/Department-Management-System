@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             } else {
 
                 $_SESSION['error'] = "Your account is not valid.";
-                header("location:../signin.php");
+                header("location:../index.php");
                 $response['error'] = true;
                 $response['message'] = "Your account is not of a valid type.";
 
