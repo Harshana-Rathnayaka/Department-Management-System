@@ -2,8 +2,8 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1:3306
--- Generation Time: Nov 24, 2020 at 01:47 PM
+-- Host: 127.0.0.1:3307
+-- Generation Time: Nov 28, 2020 at 01:16 PM
 -- Server version: 8.0.21
 -- PHP Version: 7.1.33
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `department_ms`
 --
+CREATE DATABASE IF NOT EXISTS `department_ms` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `department_ms`;
 
 -- --------------------------------------------------------
 
@@ -30,9 +32,9 @@ SET time_zone = "+00:00";
 DROP TABLE IF EXISTS `departments`;
 CREATE TABLE IF NOT EXISTS `departments` (
   `department_id` int NOT NULL AUTO_INCREMENT,
-  `department_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `department_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`department_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `departments`
@@ -59,10 +61,10 @@ INSERT INTO `departments` (`department_id`, `department_name`) VALUES
 DROP TABLE IF EXISTS `login_attempts`;
 CREATE TABLE IF NOT EXISTS `login_attempts` (
   `attempt_id` int NOT NULL AUTO_INCREMENT,
-  `ip_address` varchar(100) NOT NULL,
+  `ip_address` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `timestamp` timestamp NOT NULL,
   PRIMARY KEY (`attempt_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -75,10 +77,10 @@ CREATE TABLE IF NOT EXISTS `login_log` (
   `log_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `login_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `login_ip` varchar(100) NOT NULL,
+  `login_ip` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`log_id`),
   KEY `fk_user_id_log` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `login_log`
@@ -88,7 +90,8 @@ INSERT INTO `login_log` (`log_id`, `user_id`, `login_time`, `login_ip`) VALUES
 (1, 2, '2020-11-24 09:56:33', '::1'),
 (2, 2, '2020-11-24 09:58:48', '::1'),
 (3, 3, '2020-11-24 09:59:17', '::1'),
-(4, 4, '2020-11-24 10:12:45', '::1');
+(4, 4, '2020-11-24 10:12:45', '::1'),
+(5, 2, '2020-11-24 14:40:02', '::1');
 
 -- --------------------------------------------------------
 
@@ -101,16 +104,16 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `department_id` int NOT NULL,
-  `item` varchar(250) NOT NULL,
-  `quantity` varchar(150) NOT NULL,
-  `order_details` text NOT NULL,
+  `item` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `quantity` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `order_details` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `order_status` int NOT NULL DEFAULT '0',
   `placed_on` date NOT NULL,
   `updated_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_id`),
   KEY `fk_ordered_department` (`department_id`),
   KEY `fk_ordered_user` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orders`
@@ -136,10 +139,10 @@ INSERT INTO `orders` (`order_id`, `user_id`, `department_id`, `item`, `quantity`
 DROP TABLE IF EXISTS `senior_managers`;
 CREATE TABLE IF NOT EXISTS `senior_managers` (
   `senior_manager_id` int NOT NULL AUTO_INCREMENT,
-  `senior_manager_name` varchar(150) NOT NULL,
-  `senior_manager_email` varchar(200) NOT NULL,
+  `senior_manager_name` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `senior_manager_email` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`senior_manager_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `senior_managers`
@@ -160,10 +163,10 @@ INSERT INTO `senior_managers` (`senior_manager_id`, `senior_manager_name`, `seni
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `fullname` varchar(150) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `password` varchar(250) NOT NULL,
+  `fullname` varchar(150) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(250) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_type` int NOT NULL,
   `department_id` int NOT NULL,
   `status` int NOT NULL,
@@ -171,15 +174,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `otp` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_department_id` (`department_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `fullname`, `username`, `email`, `password`, `user_type`, `department_id`, `status`, `attempts`, `otp`) VALUES
-(1, 'Admin Test', 'admin', 'admin@gmail.com', '202cb962ac59075b964b07152d234b70', 0, 1, 1, 0, 648518),
-(2, 'Leader Test', 'leader', 'leader1@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 1, 1, 0, 446620),
+(1, 'Admin Test', 'admin', 'admin@gmail.com', '202cb962ac59075b964b07152d234b70', 0, 1, 1, 0, 335782),
+(2, 'Leader Test', 'leader', 'leader1@gmail.com', '202cb962ac59075b964b07152d234b70', 1, 1, 1, 0, 356134),
 (3, 'Manager Test 1', 'manager1', 'manager1@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 2, 1, 0, 728192),
 (4, 'Finance Manager', 'finance', 'finance@gmail.com', '202cb962ac59075b964b07152d234b70', 3, 8, 1, 0, 285845),
 (5, 'Manager Test 2', 'manager2', 'manager2@gmail.com', '202cb962ac59075b964b07152d234b70', 2, 3, 1, 0, 0),
