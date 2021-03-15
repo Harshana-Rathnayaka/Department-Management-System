@@ -518,6 +518,21 @@ class DbOperations
         }
     }
 
+    // change password
+    public function changePassword($user_id, $new_password)
+    {
+        $stmt = $this->con->prepare("UPDATE `users` SET `password` = ? WHERE `id` = ?");
+        $stmt->bind_param("si", $new_password, $user_id);
+
+        if ($stmt->execute()) {
+            // password changed
+            return 0;
+        } else {
+            // some error
+            return 1;
+        }
+    }
+
     // update departments
     public function updateDepartments($department_id, $department_name)
     {
