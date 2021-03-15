@@ -75,7 +75,7 @@ include 'sidebar.php';
 
 
     <div class="page-wrapper">
-      <!-- Header -->    
+      <!-- Header -->
 
       <?php
 
@@ -194,22 +194,7 @@ unset($_SESSION['missing']);
                 </div>
                 <div class="modal-body">
                   <form action="../api/createOrder.php" method="POST">
-                  <div class="form-group">
-                      <label for="department">Department</label>
-                      <select class="form-control" name="department" id="department">
-                      <?php
-include '../api/getLists.php';
-if ($departments_admin):
-    while ($row = mysqli_fetch_array($departments_admin)):
-    ?>
-												        <option value="<?php echo $row['department_id']; ?>"> <?php echo $row['department_name']; ?></option>
-															<?php
-endwhile;
-endif;
-?>
-                      </select>
-                      <small class="form-text text-muted">This is the department for the new Order.</small>
-                    </div>
+
                     <div class="form-group">
                       <label for="item">Item</label>
                       <input name="item" id="item" class="form-control" aria-describedby="itemHelp" placeholder="Item name" required>
