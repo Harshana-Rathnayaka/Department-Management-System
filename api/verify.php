@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
 
             $_SESSION['error'] = "The code you entered is not correct. Please try again.";
-            header("location:../verify.php");
+            header("location:../verification.php");
             $response['error'] = true;
             $response["message"] = 'The code you entered is not correct. Please try again.';
 
@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
 
         $_SESSION['missing'] = "Please enter the code sent to your email address.";
-        header("location:../verify.php");
+        header("location:../verification.php");
         $response['error'] = true;
         $response["message"] = 'Please enter the code sent to your email address.';
 
