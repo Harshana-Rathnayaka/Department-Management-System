@@ -40,6 +40,13 @@
               </a>
             </li>
 
+            <li class="<?php if($currentPage =='change-password'){echo 'active';}?>">
+              <a class="sidenav-item-link" href="change-password.php">
+                <i class="mdi mdi-lock"></i>
+                <span class="nav-text">Change Password</span>
+              </a>
+            </li>
+
           </ul>
 
         </div>
