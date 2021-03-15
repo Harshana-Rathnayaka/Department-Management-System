@@ -268,7 +268,7 @@ class DbOperations
     // retrieving login log table
     public function getLoginLog()
     {
-        $stmt = $this->con->prepare("SELECT * FROM `login_log` INNER JOIN users ON users.id = login_log.user_id");
+        $stmt = $this->con->prepare("SELECT * FROM `login_log` INNER JOIN users ON users.id = login_log.user_id ORDER BY `login_time` DESC");
         $stmt->execute();
         return $stmt->get_result();
     }

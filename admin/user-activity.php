@@ -212,15 +212,15 @@ unset($_SESSION['missing']);
 <?php
 while ($row = mysqli_fetch_array($login_activity_admin)):
 ?>
-                      <tr>
-                        <td> <?php echo $row['log_id']; ?> </td>
-                        <td> <?php echo $row['username']; ?> </td>
-                        <td> <?php echo $row['fullname']; ?> </td>
-                        <td> <?php echo $row['login_time']; ?> </td>
-                        <td> <?php echo $row['login_ip']; ?> </td>
-                      </tr>
+				                      <tr>
+				                        <td> <?php echo $row['log_id']; ?> </td>
+				                        <td> <?php echo $row['username']; ?> </td>
+				                        <td> <?php echo $row['fullname']; ?> </td>
+				                        <td> <?php echo $row['login_time']; ?> </td>
+				                        <td> <?php echo $row['login_ip']; ?> </td>
+				                      </tr>
 
-                      <?php
+				                      <?php
 endwhile;
 ?>
 
@@ -267,6 +267,7 @@ endwhile;
     $(document).ready(function() {
       $('#userActivityTable').DataTable({
         "lengthMenu": [5, 10],
+        order: [[ 3, "desc" ]]
       });
     });
   </script>
